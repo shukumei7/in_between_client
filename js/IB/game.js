@@ -1,12 +1,27 @@
 import IBC from '../ib.js';
+import { Card } from './cards.js';
 
 const e = React.createElement;
 
 function GameInfo({user, game}) {
+    const [ showDiscards, setShowDiscards ] = React.useState(false)
     return [
-        e('div', { key : 'deck', className : 'deck' }, game.deck),
-        e('div', { key : 'hidden', className : 'hidden' }, game.hidden),
-        e('div', { key : 'discards', className : 'discards' }, game.discards),
+        e('div', { key : 'deck', className : 'deck' }, e(Deck, { key : 'deck', count : game.deck })), // e('div', { key : 'deck', className : 'deck' }, game.deck),
+        e('div', { key : 'hidden', className : 'hidden' }, e(Deck, { key : 'hidden', count : game.hidden })), // e('div', { key : 'hidden', className : 'hidden' }, game.hidden),
+        e('div', { key : 'discards', className : 'discards', onClick : () => {
+            if(!game.discards.length) {
+                return;
+            }
+            IBC.play('tick');
+            if(!showDiscards) {
+                setShowDiscards(true);
+                return;
+            }
+            $('.discards .card').addClass('dealt');
+            setTimeout(() => {
+                setShowDiscards(false);
+            }, 1500);
+        }},  e(Discards, { key : 'discards', cards : game.discards, show : showDiscards})),
         e('div', { key : 'pot', className : 'pot' }, game.pot),
         e('div', { key : 'players', className : 'players' }, e(Players, { 
             user    : user,
@@ -18,6 +33,37 @@ function GameInfo({user, game}) {
             hands   : game.hands
         }))
     ]
+}
+
+function Discards({cards, show}) {
+    if(!show) {
+        return e(Deck, { key : 'discards', count : cards.length});
+    }
+    if(!$('.open').length) {
+        setTimeout(() => {
+            const hidden = $('.discards .dealt');
+            hidden.removeClass('dealt');
+        }, 300);
+    }
+    let out = [];
+    for(let x in cards) {
+        out.push(e(Card, { key : x, number : cards[x]}));
+    }
+    return [
+        e('div', { key : 'blocker', className : 'blocker' }, ' '),
+        e('div', { key : 'open', className : 'open' }, out)
+    ];
+}
+
+function Deck({count}) {
+    let cards = [e('div', { key : 'count', className : 'count'}, count)];
+    for(let x = 0 ; x < count; x++) {
+        cards.push(e('div', { key : x , className : 'card', style : {
+            top     : 'calc(' + x + ' * -1 * var(--card-thickness))',
+            left    : 'calc(' + x + ' * var(--card-slope))',
+        }}, ' '));
+    }
+    return cards;
 }
 
 function Players({user, players, playing, dealer, current, scores, hands}) {

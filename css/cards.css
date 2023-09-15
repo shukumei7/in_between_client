@@ -1,6 +1,10 @@
-@import url('suits.css');
+.card {
+    .diamond, .spade, .heart, .club {
+        --suit-size: 2px;
+    }
+}
 
-.hand {
+.hand, .open {
     --box-height: 120px;
     --box-width: 90px;
     position: fixed;
@@ -10,36 +14,35 @@
     white-space: nowrap;
     height: var(--box-height);
     z-index: 4;
-}
-
-.card {
-    position: relative;
-    display: inline-block;
-    height: var(--box-height);
-    width: var(--box-width);
-    font-size: 20pt;
-    font-weight: bold;
-    margin-right: 20px;
-    transition: margin-left 2s;
-    &.dealt {
-        margin-left: 150vw !important;
+    >.card {
+        position: relative;
+        display: inline-block;
+        height: var(--box-height);
+        width: var(--box-width);
+        font-size: 20pt;
+        font-weight: bold;
+        margin-right: 20px;
+        transition: margin-left 2s;
+        &.dealt {
+            margin-left: 150vw !important;
+        }
+    }
+    >.card .box {
+        --line-width: 1px;
+        --line-tail: 0;
+        --line-color: black;
+        background: white;
+        color: black;
+        border-radius: 1vh;
+    
+        .box__line--top::before, .box__line--top::after, .box__line--bottom::before, .box__line--bottom::after {
+            height: 0;
+            width: 0;
+        }
     }
 }
-
-.card:nth-child(3) {
-    margin-left: 30px;
-}
-
-.card .box {
-    --line-width: 1px;
-    --line-tail: 0;
-    --line-color: black;
-    background: white;
-    color: black;
-    border-radius: 1vh;
-
-    .box__line--top::before, .box__line--top::after, .box__line--bottom::before, .box__line--bottom::after {
-        height: 0;
-        width: 0;
+.hand {
+    .card:nth-child(3) {
+        margin-left: 30px;
     }
 }

@@ -6,7 +6,7 @@ const e = React.createElement;
 function CardHand({cards}) {
     // console.log('Load Cards', cards);
     setTimeout(() => {
-        const hidden = $('.dealt');
+        const hidden = $('.hand .dealt');
         // console.log('Show Cards', cards.length, hidden.length);
         if(hidden.length < 3) {
             hidden.removeClass('dealt');
@@ -26,7 +26,7 @@ function CardHand({cards}) {
     return e('div', { key : 'hand', className : 'hand' }, out);
 }
 
-function Card({number}) {
+export function Card({number}) {
     let value = Math.round(number / 10);
     const suit = number % 5;
     let symbol = Clubs;

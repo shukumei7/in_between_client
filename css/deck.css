@@ -1,0 +1,52 @@
+.deck {
+    --deck-distance: 1;
+}
+.hidden {
+    --deck-distance: 0.8;
+}
+.discards {
+    --deck-distance: 1.2;
+}
+.deck, .hidden, .discards {
+    --card-thickness: 0.5px;
+    --card-slope: 0px;
+    --card-width: 50px;
+    --card-height: 90px;
+    width: 100px; /* Adjust this width for spacing */
+    >.card {
+        width: calc(var(--card-width) * var(--deck-distance));
+        height: calc(var(--card-height) * var(--deck-distance));
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform-origin: center center;
+        transition: transform 0.3s ease-in-out; /* Add smooth transition effect */
+        background: white;
+        border: 1px solid black;
+        border-radius: 1vw;
+        perspective: 1000px; /* Perspective for 3D effect */
+        transform-style: preserve-3d;
+        transform: rotateX(80deg) rotateZ(-40deg);
+    }
+    +.count {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        color: white;
+        font-weight: bold;
+    }
+    .open {
+        position: fixed;
+        top: 50vh;
+        left: 0;
+        right: 0;
+        overflow-x: auto;
+        z-index: 6;
+        height: calc(var(--card-height) + '50px');
+        pointer-events: auto;
+        /* width */
+        ::-webkit-scrollbar {
+            width: 0px;
+        }
+    }
+}

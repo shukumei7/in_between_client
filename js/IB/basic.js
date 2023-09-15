@@ -5,8 +5,7 @@ import Maho from '../maho.js';
 const e = React.createElement;
 const useState = React.useState;
 
-function BasicUI({user, points, message, activities}) {
-    const [ showLogs , setShowLogs ] = useState(false);
+function BasicUI({user, points, message, activities, showLogs, setShowLogs}) {
     const [ bottom , setBottom ] = useState(true); 
     const [ div , setDiv ] = useState(null);
     let out = [];
@@ -48,6 +47,7 @@ function BasicUI({user, points, message, activities}) {
     out.push(e('a', { key : 'message', className : 'info info_message', style : {
         bottom : showLogs ? IBC.message_up : IBC.message_down
     }, onClick : () => {
+        IBC.play('tick');
         if(!activities.length) {
             if(showLogs) setShowLogs(false);
             return;
@@ -129,6 +129,7 @@ function BasicUI({user, points, message, activities}) {
         if(showLogs && !bottom) {
             // console.log('Show Bottom Button');
             out.push(e('a', { key : 'bottom', className : 'button short bottom', onClick : () => {
+                IBC.play('tick');
                 scrollBottom();
                 $('.button.bottom').hide();
             }}, e(DisplayBox, { content : e('i', { className : 'arrow down'}), addClass : 'single center'})));

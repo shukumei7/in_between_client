@@ -33,12 +33,13 @@ function PlayerAction({max_bet, play, pass}) {
     }
     return e('div', { key : 'playbar', className : 'playbar' }, [
         e('div', { key : 1 }, [
-            e('div', { key : 'bet', className : 'input' } , e(DisplayBox, { content : e('input', { key : 'bet', id : IBC.bet_id, type : 'number', step : 1, min : 1, max : max_bet })})),
+            e('div', { key : 'bet', className : 'bet input' } , e(DisplayBox, { content : e('input', { key : 'bet', id : IBC.bet_id, type : 'number', step : 1, min : 1, max : max_bet })})),
             e('a', { key : 'play', className : 'button short', title : 'Play', onClick : () => {
                 play($('#' + IBC.bet_id).val());
             }}, e(DisplayBox, { content : e('i', { className : 'arrow right', style : {
-                borderColor: 'green'
-            }}), addClass : 'single center'}))
+                borderColor : 'green',
+                color       : 'black'
+            }}, ''), addClass : 'single center'}))
         ]),
         e('div', { key : 2 }, [
             e('a', { key : 'add', className : 'button short', title : 'Increase bet', onClick : () => {
