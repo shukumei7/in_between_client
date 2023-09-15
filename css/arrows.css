@@ -1,0 +1,27 @@
+@import url('box.css');
+
+.arrow {
+    position: relative;
+    border: solid var(--line-color);
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 6px;
+    &.right {
+        transform: rotate(-45deg);
+        -webkit-transform: rotate(-45deg);
+    }
+    &.left {
+        transform: rotate(135deg);
+        -webkit-transform: rotate(135deg);
+    }
+    &.up {
+        top: 5px;
+        transform: rotate(-135deg);
+        -webkit-transform: rotate(-135deg);
+    }
+    &.down {
+        top: -4px;
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+    }
+}

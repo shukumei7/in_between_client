@@ -1,0 +1,87 @@
+.diamond, .spade, .heart, .club {
+  --red-suit      : #c41010;
+  --black-suit    : #444444;
+  --suit-size     : 0.22vh;
+  width: calc(24*var(--suit-size));
+  height: calc(24*var(--suit-size));
+  margin: calc(4.5*var(--suit-size));
+  position: relative;
+  transform: rotate(45deg);
+  display: inline-block;
+}
+
+.diamond {
+  .square {
+    background-color: var(--red-suit);
+    position: absolute;
+    width: calc(16*var(--suit-size));
+    height: calc(16*var(--suit-size));
+    top: calc(4*var(--suit-size));
+    left: calc(4*var(--suit-size));
+  }
+}
+
+.spade, .club {
+  .square, .circle1, .circle2, .circle3 {
+    background-color: var(--black-suit);
+    position: absolute;
+  }
+  .square {
+    width: calc(12*var(--suit-size));
+    height: calc(12*var(--suit-size));
+    top: calc(4*var(--suit-size));
+    left: calc(4*var(--suit-size));
+  }
+  .circle1, .circle2, .circle3 {
+    width: calc(12*var(--suit-size));
+    height: calc(12*var(--suit-size));
+    border-radius: calc(6*var(--suit-size)) calc(6*var(--suit-size));
+  }
+  .circle1 {
+    top: calc(4*var(--suit-size));
+    left: calc(10*var(--suit-size));
+  }
+  .circle2 {
+    top: calc(10*var(--suit-size));
+    left: calc(4*var(--suit-size));
+  }
+  .circle3 {
+    top: calc(2*var(--suit-size));
+    left: calc(2*var(--suit-size));
+  }
+  .tail {
+    position: absolute;
+    width: 0;
+    height: 0;
+    top: calc(17.5*var(--suit-size));
+    left: calc(17.5*var(--suit-size));
+    border-top: calc(5*var(--suit-size)) solid var(--black-suit);
+    border-right: calc(5*var(--suit-size)) solid transparent;
+  }
+}
+
+.heart {
+  .square, .circle1, .circle2 {
+    background-color: var(--red-suit);
+    position: absolute;
+  }
+  .square {
+    width: calc(12*var(--suit-size));
+    height: calc(12*var(--suit-size));
+    top: calc(7*var(--suit-size));
+    left: calc(7*var(--suit-size));
+  }
+  .circle1, .circle2 {
+    width: calc(12*var(--suit-size));
+    height: calc(12*var(--suit-size));
+    border-radius: calc(6*var(--suit-size)) calc(6*var(--suit-size));
+  }
+  .circle1 {
+    top: calc(1*var(--suit-size));
+    left: calc(7*var(--suit-size));
+  }
+  .circle2 {
+    top: calc(7*var(--suit-size));
+    left: calc(1*var(--suit-size));
+  }
+}

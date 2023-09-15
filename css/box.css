@@ -1,0 +1,85 @@
+/* Author Rob DiMarzo */
+:root {
+    --box-height: 200px;
+    --box-width: 400px;
+    --line-color: rgba(255,223,0,1);
+}
+.box {
+    --line-width: 6px;
+    --line-tail: 12px;
+    --content-pad: 20px;
+    background-color: #111111;
+    color: var(--line-color);
+    height: 100%;
+    width: 100%;
+    position: relative;
+    .content {
+        position: relative;
+        height: 100%;
+        padding: 0 var(--content-pad);
+        overflow-y: auto;
+        &.single {
+            display : flex;
+            align-items : center;
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+        }
+        &.center {
+            justify-content: center;
+        }
+        &.right {
+            justify-content: right;
+        }
+    }
+}
+.box__line {
+    position: absolute;
+    background: var(--line-color);
+    border-radius: 1vh;
+    &.box__line--top, &.box__line--bottom {
+        height: var(--line-width);
+        width: calc(var(--box-width) + var(--line-tail));
+        left: calc(-1 * var(--line-width));
+    }
+    &.box__line--top::before, &.box__line--top::after, &.box__line--bottom::before, &.box__line--bottom::after {
+        content: "";
+        position: absolute;
+        width: var(--line-width);
+        height: var(--line-width);
+        background: var(--line-color);
+    }
+    &.box__line--top {
+        top: 0;
+    }
+    &.box__line--top::before {
+        left: 0;
+        bottom: var(--line-width);
+    }
+    &.box__line--top::after {
+        right: 0;
+        bottom: var(--line-width);
+    }
+    &.box__line--bottom {
+        bottom: 0;
+    }
+    &.box__line--bottom::before {
+        left: 0;
+        top: var(--line-width);
+    }
+    &.box__line--bottom::after {
+        right: 0;
+        top: var(--line-width);
+    }
+    &.box__line--left, &.box__line--right {
+        width: var(--line-width);
+        height: calc(var(--box-height) + var(--line-tail));
+        top: calc(-1 * var(--line-width));
+    }
+    &.box__line--left {
+        left: 0;
+    }
+    &.box__line--right {
+        right: 0;
+    }
+}

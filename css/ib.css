@@ -1,0 +1,275 @@
+@import "arrows.css";
+@import "box.css";
+@import "cards.css";
+@import "suits.css";
+@import "timer.css";
+
+:root {
+    --logo-size: 22vh;
+    --single-height: 6vh;
+    --log-transition: 1s;
+    --log-height: 21.5vh;
+    --message-down: -0.7vh;
+    --message-up: 20vh;
+}
+body {
+    background-color: #111111;
+    background-image: url('../img/bg.jpg');
+    background-position: center;
+    background-size: cover;
+    background-blend-mode: color-dodge;
+}
+.blocker {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: black;
+    opacity: 0.2;
+}
+main, #logo, .info, .actionbar {
+    position: fixed;
+}
+main {
+    left: 0;
+    width: 100%;
+    height: calc(100% - 20vh);
+}
+main, #logo, .info_user_name, .info_points {
+    top: -1vh; /* 10vh */
+}
+#logo, .info_activities, .info_message {
+    left: -1vw;
+}
+#logo, .info_user_name, .info_points, .info_message {
+    --box-height: var(--single-height);
+}
+#logo {
+    --box-width: var(--logo-size);
+    --box-height: var(--logo-size);
+    cursor: pointer;
+    font-size: 0;
+}
+.logo-row {
+    width: 100%;
+    text-align: center;
+    padding-top: 20px;
+}
+.info {
+    width: var(--box-width);
+    height: var(--box-height);
+}
+.info_user_name {
+    --box-width: 35vw;
+    left: 25vw;
+    text-align: left;
+    cursor: pointer;
+}
+.info_points {
+    --box-width: 150px;
+    left: 62vw;
+    justify-content: right;
+}
+.info_message, .info_activities {
+    z-index: 5;
+    --box-width: 50vw;
+}
+.info_message {
+    bottom: -0.7vh;
+    cursor: pointer;
+    transition: bottom var(--log-transition);
+}
+#logo > span {
+    position: relative;
+    top: -2.5vh;
+    color: white;
+}
+.info-container {
+    font-size: 2vh;
+    width: 0;
+    top: 0;
+    right: 0;
+    height: 0;
+    .content > div {
+        padding-top: 20px;
+    }
+    .content > div:last-child {
+        padding-bottom: 20px;
+    }
+}
+.info_activities {
+    --box-height: var(--log-height);
+    bottom: -0.6vh;
+    .content div {
+        padding-top: 20px;
+    }
+    .content div:last-child {
+        padding-bottom: 20px;
+    }
+    &.compress {
+        .box__line--right {
+            height: 0;
+        }
+        .box__line--top, .box__line--bottom, .box__line--bottom::before, .box__line--bottom::after, .box__line--top::before, .box__line--top::after {
+            height: 0;
+        }
+        .box__line--bottom::before, .box__line--bottom::after {
+            top: 0;
+        }
+    }
+}
+.info_activities, .info_activities .box__line, .box__line--bottom::before, .box__line--bottom::after, .box__line--top::before, .box__line--top::after {
+    transition: height var(--log-transition), top var(--log-transition);
+}
+.actionbar {
+    right: -1vh;
+    bottom: -1vh;
+    max-width: 40vw;
+    .button {
+        margin-left: 1.8vw;
+        margin-top: 3vh;
+    }
+}
+.playbar {
+    position: fixed;
+    top: 74.7vh;
+    left: 66vw;
+    pointer-events: none;;
+    >* {
+        pointer-events: auto;
+        margin-bottom: 2vh;
+        >* {
+            margin-right: 1.8vw;
+        }
+    }
+    /*
+    >div:last-child {
+        margin-left: 19.4vw;
+    }
+    */
+}
+.input, .button {
+    --box-height: 50px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--box-height);
+    width: var(--box-width);
+    font-size: 2vh;
+    border: 0;
+    font-weight: bold;
+}
+.input {
+    --box-width: 160px;
+}
+.input input {
+    width: 100%;
+    height: 100%;
+    background: black;
+    color: white;
+    text-align: right;
+    outline: none;
+    border: 0;
+    padding-right: 2vw;
+}
+.input input:focus, .input input:active, .input input:hover {
+    border: 0;
+    outline: none;
+}
+/* Chrome, Safari, Edge, Opera */
+.input input::-webkit-outer-spin-button,
+.input input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+/*
+.input input[type=number] {
+  -moz-appearance: textfield;
+}
+*/
+
+.login {
+    position: fixed;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    .button {
+        margin-right: 1.8vw;
+        margin-bottom: 3vh;
+    }
+}
+
+div.login {
+    display: flex;
+}
+
+.button {
+    --box-width: 200px;
+    cursor: pointer;
+    &.login {
+        --box-height: 50px;
+        --box-width: 150px;
+    }
+    &.short {
+        --box-width: 70px;
+    }
+    &.bottom {
+        position: fixed;
+        top: 84vh;
+        left: 51vw;
+    }
+}
+.button:active {
+    .box {
+        background: yellow;
+        color: #111111;
+    }
+}
+.pot, .deck, .hidden, .discards {
+    position: fixed;
+    top: 50%;
+    left: 42%;
+    color: white;
+    font-weight: bold;
+}
+.pot {
+    top: 70%;
+}
+.deck {
+    top: 65%;
+    left: 55%;
+}
+.hidden {
+    top: 63%;
+    left: 70%;
+}
+.discards {
+    top: 72%;
+    left: 75%;
+}
+.players {
+    position: relative;
+    top: 34vh;
+    display: flex;
+}
+.player {
+    position: relative;
+    flex: 1;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+.player::before {
+    content : " ";
+    background: black;
+    opacity: 0.5;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+}
