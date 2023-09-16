@@ -10,6 +10,9 @@ export function Timer({deadline}) {
         const diff = deadline - (Date.now() / 1000);
         // console.log('Set deadline', deadline, diff);
         setTimed(diff);
+        setTimeout(() => {
+            $('.sand').css('transition', 'top 1s linear 1s');
+        }, 300);
     }, []);
 
     React.useEffect(() => {

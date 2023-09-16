@@ -175,14 +175,13 @@ main, #logo, .info_user_name {
     */
 }
 .modal .buttons {
-    position: absolute;
     bottom: 5vh;
 }
 .buttons {
     padding: 0px 10px;
     .button {
-        margin-right: 20px;
-        margin-bottom: 20px;
+        margin-left: 20px;
+        margin-top: 10px;
     }
 }
 .bet.input, .button {
@@ -352,6 +351,7 @@ div.login {
     left: 30vh;
     height: var(--box-height);
     width: var(--box-width); 
+    pointer-events: auto;
     .content {
         overflow-y: auto;
         overflow-x: hidden;

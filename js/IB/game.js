@@ -1,4 +1,5 @@
 import IBC from '../ib.js';
+import Maho from '../maho.js';
 import { Card } from './cards.js';
 
 const e = React.createElement;
@@ -17,8 +18,8 @@ function GameInfo({user, game}) {
             scores  : game.scores,
             hands   : game.hands
         })),
-        e('div', { key : 'hidden', className : 'hidden' }, e(Deck, { key : 'hidden', count : game.hidden })), // e('div', { key : 'hidden', className : 'hidden' }, game.hidden),
-        e('div', { key : 'deck', className : 'deck' }, e(Deck, { key : 'deck', count : game.deck })), // e('div', { key : 'deck', className : 'deck' }, game.deck),
+        e('div', { key : 'hidden', className : 'hidden' }, e(Deck, { key : 'hidden', count : game.hidden, label : 'Trash: ' })), // e('div', { key : 'hidden', className : 'hidden' }, game.hidden),
+        e('div', { key : 'deck', className : 'deck' }, e(Deck, { key : 'deck', count : game.deck, label : 'Deck: ' })), // e('div', { key : 'deck', className : 'deck' }, game.deck),
         e('div', { key : 'discards', className : 'discards', onClick : () => {
             if(!game.discards.length) {
                 if(showDiscards) setShowDiscards(false);
@@ -38,14 +39,14 @@ function GameInfo({user, game}) {
             '--card-slope'       : '5px',
             '--card-color'       : 'white'
         }},  e(Discards, { key : 'discards', cards : game.discards, show : showDiscards})),
-        e('div', { key : 'pot', className : 'pot' }, game.pot)
+        e('div', { key : 'pot', className : 'pot' }, 'Pot: ' + Maho.number(game.pot))
     ]
 }
 
 function Discards({cards, show}) {
     // console.log('Update Discards', cards.length);
     if(!show) {
-        return e(Deck, { key : 'discards', count : cards.length, cards : cards});
+        return e(Deck, { key : 'discards', count : cards.length, label : 'Played: ', cards : cards});
     }
     if(!$('.open').length) {
         setTimeout(() => {
@@ -59,15 +60,15 @@ function Discards({cards, show}) {
     }
     return [
         e('div', { key : 'blocker', className : 'blocker' }, ' '),
-        e('div', { key : 'open', className : 'open' }, out)
+        e('div', { key : 'open', className : 'open' }, out),
     ];
 }
 
-function Deck({count , cards = []}) {
+function Deck({label, count , cards = []}) {
     const [ display , setDisplay ] = useState([]);
     useEffect(() => {
         let deck = [];
-        deck.push(e('div', { key : 'count', className : 'count'}, count));
+        deck.push(e('div', { key : 'count', className : 'count'}, label + count));
         for(let x = 0 ; x < count; x++) {
             let style = {
                 top     : 'calc(' + x + ' * -1 * var(--card-thickness))',
