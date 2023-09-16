@@ -1,15 +1,19 @@
-.diamond, .spade, .heart, .club {
-  --red-suit      : #c41010;
-  --black-suit    : #444444;
+.diamond , .spade, .heart, .club {
   width: calc(24*var(--suit-size));
   height: calc(24*var(--suit-size));
   margin: calc(4.5*var(--suit-size));
-  position: relative;
-  transform: rotate(45deg);
   display: inline-block;
+  position: relative;
+  .marker {    
+    position: relative;
+    top: 10px;
+    left: 10px;
+    transform: rotate(45deg);
+  }
 }
 
 .diamond {
+  --suit-color: var(--red-suit);
   .square {
     background-color: var(--red-suit);
     position: absolute;
@@ -21,6 +25,7 @@
 }
 
 .spade, .club {
+  --suit-color: var(--black-suit);
   .square, .circle1, .circle2, .circle3 {
     background-color: var(--black-suit);
     position: absolute;
@@ -60,6 +65,7 @@
 }
 
 .heart {
+  --suit-color: var(--red-suit);
   .square, .circle1, .circle2 {
     background-color: var(--red-suit);
     position: absolute;

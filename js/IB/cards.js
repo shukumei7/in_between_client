@@ -26,15 +26,19 @@ export function Card({number , style = {}, dealt = 'dealt'}) {
     let value = Math.round(number / 10);
     const suit = number % 5;
     let symbol = Clubs;
+    let suitClass = 'club';
     switch(suit) {
         case 4:
             symbol = Diamond;
+            suitClass = 'diamond';
             break;
         case 3:
             symbol = Heart;
+            suitClass = 'heart';
             break;
         case 2:
             symbol = Spade;
+            suitClass = 'spade';
             break;
     }
     switch(value) {
@@ -52,24 +56,24 @@ export function Card({number , style = {}, dealt = 'dealt'}) {
             break;
     }
     // console.log('Card', value, suit);
-    return (e('div', { key : 'card_' + number, className : 'card card_' + number + ' ' + dealt, style : style }, e(DisplayBox, { content : [
+    return (e('div', { key : 'card_' + number, className : 'card card_' + number + ' ' + suitClass + ' ' + dealt, style : style }, e(DisplayBox, { content : [
         e('div', { key : 'number', className : 'number' }, '' + value),
         e(symbol, { key : 'suit' })
     ] })));
 }
 
 function Diamond() {
-    return (
-        e('div', { key : 'd', className : 'diamond' }, [
+    return [
+        e('div', { key : 'd', className : 'marker' }, [
             e('div', { key : 1, className : 'square'})
         ])
-    );
+    ];
     //   '<div class="diamond"><div class="square"></div></div>';
 }
 
 function Heart() {
     return (
-        e('div', { key : 'h', className : 'heart' }, [
+        e('div', { key : 'h', className : 'marker' }, [
             e('div', { key : 1, className : 'square'}),
             e('div', { key : 2, className : 'circle1'}),
             e('div', { key : 3, className : 'circle2'})
@@ -80,7 +84,7 @@ function Heart() {
 
 function Spade() {
     return (
-        e('div', { key : 's', className : 'spade' }, [
+        e('div', { key : 's', className : 'marker' }, [
             e('div', { key : 1, className : 'square'}),
             e('div', { key : 2, className : 'circle1'}),
             e('div', { key : 3, className : 'circle2'}),
@@ -92,7 +96,7 @@ function Spade() {
 
 function Clubs() {
     return (
-        e('div', { key : 'c', className : 'club' }, [
+        e('div', { key : 'c', className : 'marker' }, [
             e('div', { key : 1, className : 'circle1'}),
             e('div', { key : 2, className : 'circle2'}),
             e('div', { key : 3, className : 'circle3'}),

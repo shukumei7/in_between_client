@@ -30,8 +30,20 @@
         font-weight: bold;
         margin-right: 20px;
         transition: margin-left 2s;
+        pointer-events: auto;
         &.dealt, &.pass {
             margin-left: 150vw !important;
+        }
+        .content {
+            padding: 10px 0 0 10px;
+            overflow: hidden;
+            .number {
+                color: var(--suit-color);
+            }
+            .marker {
+                top: 20px;
+                left:  23px;
+            }
         }
     }
     >.card .box {

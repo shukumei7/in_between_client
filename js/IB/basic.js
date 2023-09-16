@@ -101,7 +101,7 @@ function Activities({user, activities, scrollBottom}) {
                 case 'shuffle':
                     IBC.play('shuffle', 'se');
                     $('.open .card').addClass('pass');
-                    break;
+                    return;
                 case 'pot':
                     for(let x = 0 ; x < Math.abs(event.bet); x++) {
                         setTimeout(() => {
@@ -111,7 +111,7 @@ function Activities({user, activities, scrollBottom}) {
                     IBC.play('chip', 'se');
                     return;
                 case 'deal':
-                    // IBC.play('card', 'se');
+                    IBC.play('card', 'se');
                     return;
             }
         }

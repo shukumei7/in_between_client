@@ -8,8 +8,17 @@ const useEffect = React.useEffect;
 function GameInfo({user, game}) {
     const [ showDiscards, setShowDiscards ] = React.useState(false)
     return [
-        e('div', { key : 'deck', className : 'deck' }, e(Deck, { key : 'deck', count : game.deck })), // e('div', { key : 'deck', className : 'deck' }, game.deck),
+        e('div', { key : 'players', className : 'players' }, e(Players, { 
+            user    : user,
+            players : game.players,
+            playing : game.playing,
+            dealer  : game.dealer,
+            current : game.current,
+            scores  : game.scores,
+            hands   : game.hands
+        })),
         e('div', { key : 'hidden', className : 'hidden' }, e(Deck, { key : 'hidden', count : game.hidden })), // e('div', { key : 'hidden', className : 'hidden' }, game.hidden),
+        e('div', { key : 'deck', className : 'deck' }, e(Deck, { key : 'deck', count : game.deck })), // e('div', { key : 'deck', className : 'deck' }, game.deck),
         e('div', { key : 'discards', className : 'discards', onClick : () => {
             if(!game.discards.length) {
                 if(showDiscards) setShowDiscards(false);
@@ -29,16 +38,7 @@ function GameInfo({user, game}) {
             '--card-slope'       : '5px',
             '--card-color'       : 'white'
         }},  e(Discards, { key : 'discards', cards : game.discards, show : showDiscards})),
-        e('div', { key : 'pot', className : 'pot' }, game.pot),
-        e('div', { key : 'players', className : 'players' }, e(Players, { 
-            user    : user,
-            players : game.players,
-            playing : game.playing,
-            dealer  : game.dealer,
-            current : game.current,
-            scores  : game.scores,
-            hands   : game.hands
-        }))
+        e('div', { key : 'pot', className : 'pot' }, game.pot)
     ]
 }
 

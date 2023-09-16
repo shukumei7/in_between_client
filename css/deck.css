@@ -1,11 +1,4 @@
-.deck {
-    --deck-distance: 1;
-}
-.hidden {
-    --deck-distance: 0.8;
-}
 .discards {
-    --deck-distance: 1.2;
     pointer-events: auto;
 }
 .deck, .hidden, .discards {
@@ -32,6 +25,13 @@
         .diamond, .spade, .heart, .club {
             --suit-size: 1px;
         }
+        .content {
+            --suit-size: 1px;
+            padding: 5px;
+            .marker {
+                left: 14px;
+            }
+        }
     }
     +.count {
         position: fixed;
@@ -46,6 +46,7 @@
         left: 0;
         right: 0;
         overflow-x: auto;
+        overflow-y: hidden;
         z-index: 6;
         height: calc(var(--card-height) + '50px');
         pointer-events: auto;

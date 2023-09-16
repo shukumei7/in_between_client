@@ -15,7 +15,7 @@ export function Timer({deadline}) {
     React.useEffect(() => {
         setTimeout(() => {
             setTime(time + 1);
-            if(timed > 0 && timed - time < IBC.alertDiff) {
+            if(timed > 0 && time < timed && timed - time < IBC.alertDiff) {
                 IBC.play('bell');
             }
         }, 1000);

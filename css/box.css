@@ -5,7 +5,6 @@
     --line-color: rgba(255,223,0,1);
 }
 .box {
-    --line-tail: 12px;
     --content-pad: 20px;
     background-color: #111111;
     color: var(--line-color);

@@ -6,6 +6,8 @@
 @import "timer.css";
 
 :root {
+    --red-suit      : #c41010;
+    --black-suit    : #444444;
     --logo-size: 160px;
     --single-height: 6vh;
     --log-transition: 1s;
@@ -13,7 +15,8 @@
     --message-down: -0.7vh;
     --message-up: 20vh;
     --placeholder-color: lightgrey;
-    --line-width: 6px;
+    --line-width: 0.7vh;
+    --line-tail: 1.5vh;
     --suit-size : 1.7px;
     --sand-color: 
         radial-gradient(ellipse farthest-corner at right bottom, #FEDB37 0%, #FDB931 8%, #9f7928 30%, #8A6E2F 40%, transparent 80%),
@@ -50,19 +53,18 @@ main {
     left: 0;
     width: 100%;
     height: calc(100% - 20vh);
+    pointer-events: none;
 }
-main, #logo, .info_user_name, .info_points {
+main, #logo, .info_user_name {
     top: calc(-1 * var(--line-width));
 }
-
 .room_name {
-    top: calc(var(--box-height) + 10px);
+    top: calc(2 *(var(--box-height) + 13px));
 }
-
 #logo {
     left: calc(-1 * var(--line-width));
 }
-.info_activities, .info_message {
+.info_activities, .info_message, .info_points {
     right: calc(-1 * var(--line-width));
 }
 #logo, .info_user_name, .info_points, .info_message, .room_name {
@@ -78,7 +80,7 @@ main, #logo, .info_user_name, .info_points {
 .logo-row {
     width: 100%;
     text-align: center;
-    padding-top: 1vw;
+    padding-top: 10px;
 }
 .info {
     width: var(--box-width);
@@ -86,19 +88,21 @@ main, #logo, .info_user_name, .info_points {
 }
 .room_name, .info_user_name {
     cursor: pointer;
+    pointer-events: auto;
 }
-.room_name, .info_user_name {
+.room_name, .info_user_name, .info_points {
     --box-width: 250px;
     right: calc(-1 * var(--line-width));
 }
+
 .info_points {
-    --box-width: 200px;
-    right: 260px;
+    top: calc(var(--box-height) + 10px);
     justify-content: right;
 }
 .info_message, .info_activities {
     z-index: 5;
     --box-width: 400px;
+    pointer-events: auto;
 }
 .info_message {
     bottom: -0.7vh;
@@ -153,8 +157,9 @@ main, #logo, .info_user_name, .info_points {
 }
 .playbar {
     position: fixed;
-    top: 74.7vh;
-    left: 66vw;
+    top: 75vh;
+    right: 10vw;
+    z-index: 4;
     pointer-events: none;;
     >* {
         pointer-events: auto;
@@ -208,6 +213,7 @@ main, #logo, .info_user_name, .info_points {
     }
 }
 input {
+    pointer-events: auto;
     background: black;
     color: white;
     outline: none;
@@ -261,6 +267,7 @@ div.login {
 .button {
     --box-width: 200px;
     cursor: pointer;
+    pointer-events: auto;
     &.login {
         --box-height: 50px;
         --box-width: 180px;
@@ -284,6 +291,7 @@ div.login {
     }
 }
 .pot, .deck, .hidden, .discards {
+    --deck-distance: 1;
     position: fixed;
     top: 50%;
     left: 42%;
@@ -294,17 +302,23 @@ div.login {
     top: 70%;
 }
 .deck {
-    top: 63%;
-    left: 51%;
+    --deck-distance: 1.2;
+    top: 62%;
+    left: 50%;
+    z-index: 2;
 }
 .hidden {
-    top: 61%;
+    --deck-distance: 1.1;
+    top: 59.6%;
     left: 59%;
+    z-index: 1;
 }
 .discards {
-    top: 65%;
-    left: 64%;
+    --deck-distance: 1.1;
+    top: 60%;
+    left: 70%;
     cursor: pointer;
+    z-index: 2;
 }
 .players {
     position: relative;
@@ -368,6 +382,7 @@ div.login {
     transform: translate(-50%, -50%);
     height: var(--box-height);
     width: var(--box-width);
+    pointer-events: auto;
     >.box >.content {
         padding: 20px;
     }

@@ -206,7 +206,7 @@ function IBCMain() {
                     updateGameData(res);
                     checkGameStatus(); // resume update game
                     setShowLogs(true);
-                }, 1500);
+                }, 1200);
             }, 3000)
         });
     }, pass : ()=> {
@@ -224,7 +224,7 @@ function IBCMain() {
                 checkGameStatus();
                 // console.log('Show logs');
                 setShowLogs(true);
-            }, 1500);
+            }, 1200);
         });
     }}));
 
