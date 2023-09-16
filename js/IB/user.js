@@ -4,23 +4,32 @@ import { DisplayBox, FormBox, ErrorBox } from './box.js';
 
 const e = React.createElement;
 const useState = React.useState;
+const useEffect = React.useEffect;
 
 export default function User({user, updateDetails, activateUI }) {
+    const [ showRegistation, setShowRegistation ] = useState(false);
+    const [ showLogin, setShowLogin ] = useState(false);
+    const [ showButton, setShowButton ] = useState(false);
+    const [ display , setDisplay ] = useState('');
+
+    useEffect(() => {
+        if(user.id) {
+            setDisplay(e(UserUI, { user : user, logout : () => {
+                IBC.headers = null;
+                updateDetails({
+                    id      : 0,
+                    name    : ''
+                }, 'You have logged out', 0);
+            }}));
+        }
+    }, [user]);
     
     if(user.id) {
-        return e(UserUI, { user : user, logout : () => {
-            IBC.headers = null;
-            updateDetails({
-                id      : 0,
-                name    : ''
-            }, 'You have logged out', 0);
-        }});
+        return display;
     }
 
     const accounts = 'accounts';
-    const [ showRegistation, setShowRegistation ] = useState(false);
-    const [ showLogin, setShowLogin ] = useState(false);
-    const [ showButton, setShowButton ] = React.useState(false);
+    
     const loginUser = (res) => {
         IBC.play('success');
         IBC.headers = {
@@ -93,14 +102,18 @@ export default function User({user, updateDetails, activateUI }) {
 }
 
 function UserUI({user, logout}) {
-    return e('a', { key : 'name', className : 'info info_user_name', onClick : () => {
-        if(!confirm('Are you sure you want to log out?')) {
-            return;
-        }
-        Cookie.set(IBC.cookie_id, 0);
-        Cookie.set(IBC.cookie_token, '');
-        logout();
-    } }, e(DisplayBox, { content : user.name, addClass : 'single center' }));
+    const [ display , setDisplay ] = useState('');
+    useEffect(() => {
+        setDisplay(e('a', { key : 'name', className : 'info info_user_name', onClick : () => {
+            if(!confirm('Are you sure you want to log out?')) {
+                return;
+            }
+            Cookie.set(IBC.cookie_id, 0);
+            Cookie.set(IBC.cookie_token, '');
+            logout();
+        } }, e(DisplayBox, { content : user.name, addClass : 'single center' })));
+    }, []);
+    return display;
 }
 
 function LoginUI({loginUser, close}) {

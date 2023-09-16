@@ -1,7 +1,8 @@
 import IBCMain from './IB/main.js';
+import { ErrorBox } from './IB/box.js';
 
 let IBC = {
-    api             : 'http://192.168.1.143/api/',
+    api             : 'http://localhost/api/',
     cookie_id       : 'login_user',
     cookie_token    : 'login_token',
     bet_id          : 'play-bet',
@@ -23,15 +24,15 @@ let IBC = {
         if(IBC.headers) {
             options.headers = IBC.headers;
         }
-        if(typeof error == 'function') {
-            options.error = error;
-        }
         if(typeof data == 'function') {
             if(typeof success == 'function') {
                 error = success;
             }
             success = data;
             data = {};
+        }
+        if(typeof error == 'function') {
+            options.error = error;
         }
         if(typeof success == 'function') {
             options.success = success;
@@ -128,12 +129,18 @@ let IBC = {
 export default IBC;
 
 $(() => {
+    console.log('Welcome to In Between Client!');
     IBC.get('settings', (res) => {
         for(let x in res) {
             IBC[x] = res[x];
         }
-        // console.log('Get Settings', res);
+        console.log('Connected to API');
+        IBC.root = ReactDOM.createRoot(document.querySelector('main'));
+        IBC.root.render(React.createElement(IBCMain));
+    }, (xhr) => {
+        const message = 'Could not connect to server. Try again by refreshing this page later';
+        console.log(message);
+        IBC.root = ReactDOM.createRoot(document.querySelector('main'));
+        IBC.root.render(React.createElement(ErrorBox, { message : message}));
     });
-    IBC.root = ReactDOM.createRoot(document.querySelector('main'));
-    IBC.root.render(React.createElement(IBCMain));
 });

@@ -4,12 +4,19 @@
     }
 }
 
+.hand {
+    padding-left: 6vw;   
+}
+
+.open, .discards {
+    padding-left: 5vw;
+}
+
 .hand, .open, .discards {
     --box-height: 120px;
     --box-width: 90px;
     position: fixed;
     top: 75vh;
-    padding-left: 5vw;
     pointer-events: none;
     white-space: nowrap;
     height: var(--box-height);

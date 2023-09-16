@@ -20,13 +20,13 @@ export function FormBox({inputs = [], buttons = [], size = ''}) {
     ]);
 }
 
-export function ErrorBox({message , close}) {
+export function ErrorBox({message , close = null}) {
     return [
         e('div', { key : 'blocker', className : 'blocker error' }, ''),
         e('div', { key : 'message', className : 'login error' }, e(FormBox, { 
             size    : 'quarter',
             inputs  : [ e('div', { key : 'message' }, message) ],
-            buttons : [ e('a', { key : 'button', className : 'button', onClick : close}, e(DisplayBox, { content : 'Close', addClass : 'single center' }))]
+            buttons : close ? [ e('a', { key : 'button', className : 'button', onClick : close}, e(DisplayBox, { content : 'Close', addClass : 'single center' }))] : []
          }))
     ];
 }

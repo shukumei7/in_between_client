@@ -116,7 +116,7 @@ function Activities({user, activities, scrollBottom}) {
             }
         }
         const previous = IBC.previous;
-        let last = previous.length ? previous[previous.length - 1] : null;
+        let last = previous.length ? previous.slice(-1).pop() : null;
         var o = [];
         for(let x in activities) {
             const activity = activities[x];

@@ -39,7 +39,7 @@
     border-radius: 1vh;
     &.box__line--top, &.box__line--bottom {
         height: var(--line-width);
-        width: calc(var(--box-width) + var(--line-tail));
+        width: calc(100% + var(--line-tail));
         left: calc(-1 * var(--line-width));
     }
     &.box__line--top::before, &.box__line--top::after, &.box__line--bottom::before, &.box__line--bottom::after {
@@ -73,7 +73,7 @@
     }
     &.box__line--left, &.box__line--right {
         width: var(--line-width);
-        height: calc(var(--box-height) + var(--line-tail));
+        height: calc(100% + var(--line-tail));
         top: calc(-1 * var(--line-width));
         bottom: 0;
     }

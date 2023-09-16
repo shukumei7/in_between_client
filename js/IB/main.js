@@ -226,10 +226,16 @@ function IBCMain() {
         });
     }}));
 
-    const latest = (new Date(game.activities[game.activities.length - 1].time)).getTime();
-    const diff = (Date.now() - latest) / 1000;
-    // console.log('Time comparison', Date.now(), latest, diff);
-    out.push(e(Timer, { key : 'timer', percentage : (diff/ IBC.timeout) * 100}));
+    const ignore = ['join', 'leave', 'kick'];
+    const previous = game.activities.slice(-10); // guaranteed hit
+    let last = null;
+    while((last = previous.pop()) && ignore.includes(last.action));
+    if(!last) last = { time : Date.now()};
+    // console.log('Start from', last);
+    const time = last.time;
+    const ms = (new Date(time)).getTime();
+    const seconds = ms / 1000;
+    out.push(e(Timer, { key : 'timer', deadline : seconds + IBC.timeout }));
 
     return out;
 }

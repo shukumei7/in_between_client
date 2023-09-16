@@ -356,7 +356,7 @@ div.login {
 }
 
 .modal {
-    --box-height: 90vh;
+    --box-height: 90vw;
     --box-width: 90vw;
     z-index: 7;
     position: fixed;
@@ -369,11 +369,11 @@ div.login {
         padding: 20px;
     }
     &.half {
-        --box-height: 50vh;
+        --box-height: auto;
         --box-width: 70vw;
     }
     &.quarter {
-        --box-height: 25vh;
+        --box-height: auto;
         --box-width: 40vw;
     }
     &.long {
@@ -383,7 +383,7 @@ div.login {
         --box-height: var(--box-width);
     }
     &.login {
-        --box-height: 35vh;
+        --box-height: auto;
     }
     &.room {
         --box-height: 60vh;
