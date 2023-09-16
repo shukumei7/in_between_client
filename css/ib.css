@@ -13,6 +13,13 @@
     --message-down: -0.7vh;
     --message-up: 20vh;
     --placeholder-color: lightgrey;
+    --sand-color: 
+        radial-gradient(ellipse farthest-corner at right bottom, #FEDB37 0%, #FDB931 8%, #9f7928 30%, #8A6E2F 40%, transparent 80%),
+        radial-gradient(ellipse farthest-corner at left top, #FFFFFF 0%, #FFFFAC 8%, #D1B464 25%, #5d4a1f 62.5%, #5d4a1f 100%);
+}
+.error {
+    z-index: 10 !important;
+    box-shadow: 30px 30px 30px black;
 }
 body {
     background-color: #111111;
@@ -30,7 +37,7 @@ body {
     right: 0;
     bottom: 0;
     background: black;
-    opacity: 0.2;
+    opacity: 0.4;
     z-index: 4;
 }
 main, #logo, .info, .actionbar {
@@ -44,8 +51,11 @@ main {
 main, #logo, .info_user_name, .info_points, .room_name {
     top: -1vh; /* 10vh */
 }
-#logo, .info_activities, .info_message {
+#logo {
     left: -1vw;
+}
+.info_activities, .info_message {
+    right: -20px;
 }
 #logo, .info_user_name, .info_points, .info_message, .room_name {
     --box-height: var(--single-height);
@@ -84,7 +94,7 @@ main, #logo, .info_user_name, .info_points, .room_name {
 }
 .info_message, .info_activities {
     z-index: 5;
-    --box-width: 50vw;
+    --box-width: 40vw;
 }
 .info_message {
     bottom: -0.7vh;
@@ -131,7 +141,7 @@ main, #logo, .info_user_name, .info_points, .room_name {
     }
 }
 .info_activities, .info_activities .box__line, .box__line--bottom::before, .box__line--bottom::after, .box__line--top::before, .box__line--top::after {
-    transition: height var(--log-transition), top var(--log-transition);
+    transition: height var(--log-transition), top var(--log-transition), bottom var(--log-transition);
 }
 .actionbar {
     right: -1vh;
@@ -186,6 +196,9 @@ main, #logo, .info_user_name, .info_points, .room_name {
         color: grey;
         font-style: italic;
         padding-left: 20px;
+        + input {
+            margin-top: 10px;
+        }
     }
     input + input{
         margin-top: 10px;
@@ -258,7 +271,7 @@ div.login {
     &.bottom {
         position: fixed;
         bottom: -1vh;
-        left: 48vw;
+        left: 57vw;
     }
 }
 .button:active {
@@ -307,10 +320,10 @@ div.login {
     background: black;
     opacity: 0.5;
     position: absolute;
-    top: 0;
+    top: -20px;
     left: 0;
     right: 0;
-    bottom: 0;
+    bottom: -20px;
     z-index: -1;
 }
 

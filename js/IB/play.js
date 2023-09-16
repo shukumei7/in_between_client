@@ -9,7 +9,7 @@ function PlayerAction({max_bet, play, pass}) {
         const val = input.val();
         // console.log('Check Input', input, val);
         if(input && typeof val != 'undefined' && !val.length) {
-            input.val(Math.min(max_bet, IBC.restrict_bet));
+            input.val(Math.min(max_bet, IBC.default_pot));
         }
     }, 100);
     const changeBet = (add) => {
@@ -61,9 +61,7 @@ function PlayerAction({max_bet, play, pass}) {
                     IBC.tickCount++;
                     changeBet(-1 * IBC.tickCount);
                 }, IBC.tickSpeed);
-            }, onMouseUp : () => stopTick}, e(DisplayBox, { content : e('i', { className : 'arrow down'}), addClass : 'single center'}))
-        ]),
-        e('div', { key : 3 } ,
+            }, onMouseUp : () => stopTick}, e(DisplayBox, { content : e('i', { className : 'arrow down'}), addClass : 'single center'})),
             e('a', { key : 'pass', className : 'button short', title : 'Pass', onClick : () => {
                 pass();
             }}, e(DisplayBox, { content : [
@@ -74,7 +72,7 @@ function PlayerAction({max_bet, play, pass}) {
                     borderColor: 'red'
                 }})
             ], addClass : 'single center'}))
-        )
+        ])
     ]);
 }
 export default PlayerAction;

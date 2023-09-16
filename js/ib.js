@@ -1,7 +1,7 @@
 import IBCMain from './IB/main.js';
 
 let IBC = {
-    api             : 'http://localhost/api/',
+    api             : 'http://192.168.1.143/api/',
     cookie_id       : 'login_user',
     cookie_token    : 'login_token',
     bet_id          : 'play-bet',
@@ -104,13 +104,25 @@ let IBC = {
         audio.loop = true;
         audio.play();
     },
+    chips       : (outcome, bet) => {
+        const sound = outcome ? 'gold' : 'chip';
+        for(let x = 0 ; x < bet; x++) {
+            setTimeout(() => {
+                IBC.play(sound, 'se');
+            }, x * IBC.chipDelay);
+        }
+    },
     tick        : null,
     tickSpeed   : 500,
     tickCount   : 0,
     tickMax     : 10,
     alert       : null,
     alertDelay  : 30000,
-    chipDelay   : 50
+    chipDelay   : 100,
+    clearAlert  : () => {
+        clearTimeout(IBC.alert);
+        IBC.alert = null;
+    }
 }
 
 export default IBC;
@@ -120,6 +132,7 @@ $(() => {
         for(let x in res) {
             IBC[x] = res[x];
         }
+        // console.log('Get Settings', res);
     });
     IBC.root = ReactDOM.createRoot(document.querySelector('main'));
     IBC.root.render(React.createElement(IBCMain));

@@ -1,3 +1,17 @@
 .timer {
-    --timer-limit: 60s;
+    position: fixed;
+    top: 50vh;
+    left: 5px;
+    width: 50px;
+    height: 49vh;
+    border: 1px solid white;
+    border-radius: 1vw;
+    overflow: hidden;
+    .sand {
+        position: relative;
+        background: var(--sand-color);
+        width: 100%;
+        height: 100%;
+        bottom: 0;
+    }
 }

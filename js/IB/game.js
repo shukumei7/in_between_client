@@ -2,6 +2,8 @@ import IBC from '../ib.js';
 import { Card } from './cards.js';
 
 const e = React.createElement;
+const useState = React.useState;
+const useEffect = React.useEffect;
 
 function GameInfo({user, game}) {
     const [ showDiscards, setShowDiscards ] = React.useState(false)
@@ -10,6 +12,7 @@ function GameInfo({user, game}) {
         e('div', { key : 'hidden', className : 'hidden' }, e(Deck, { key : 'hidden', count : game.hidden })), // e('div', { key : 'hidden', className : 'hidden' }, game.hidden),
         e('div', { key : 'discards', className : 'discards', onClick : () => {
             if(!game.discards.length) {
+                if(showDiscards) setShowDiscards(false);
                 return;
             }
             IBC.play('tick');
@@ -17,10 +20,14 @@ function GameInfo({user, game}) {
                 setShowDiscards(true);
                 return;
             }
-            $('.discards .card').addClass('dealt');
+            $('.discards .card').addClass('pass');
             setTimeout(() => {
                 setShowDiscards(false);
             }, 1500);
+        }, style : {
+            '--card-thickness'   : '0.1px',
+            '--card-slope'       : '5px',
+            '--card-color'       : 'white'
         }},  e(Discards, { key : 'discards', cards : game.discards, show : showDiscards})),
         e('div', { key : 'pot', className : 'pot' }, game.pot),
         e('div', { key : 'players', className : 'players' }, e(Players, { 
@@ -36,8 +43,9 @@ function GameInfo({user, game}) {
 }
 
 function Discards({cards, show}) {
+    // console.log('Update Discards', cards.length);
     if(!show) {
-        return e(Deck, { key : 'discards', count : cards.length});
+        return e(Deck, { key : 'discards', count : cards.length, cards : cards});
     }
     if(!$('.open').length) {
         setTimeout(() => {
@@ -55,19 +63,39 @@ function Discards({cards, show}) {
     ];
 }
 
-function Deck({count}) {
-    let cards = [e('div', { key : 'count', className : 'count'}, count)];
-    for(let x = 0 ; x < count; x++) {
-        cards.push(e('div', { key : x , className : 'card', style : {
-            top     : 'calc(' + x + ' * -1 * var(--card-thickness))',
-            left    : 'calc(' + x + ' * var(--card-slope))',
-        }}, ' '));
-    }
-    return cards;
+function Deck({count , cards = []}) {
+    const [ display , setDisplay ] = useState([]);
+    useEffect(() => {
+        let deck = [];
+        deck.push(e('div', { key : 'count', className : 'count'}, count));
+        for(let x = 0 ; x < count; x++) {
+            let style = {
+                top     : 'calc(' + x + ' * -1 * var(--card-thickness))',
+                left    : 'calc(' + x + ' * var(--card-slope))'
+            };
+            deck.push(e(Discarded, { key : x, index : x, card : cards[x], style : style}));
+        }
+        setDisplay(deck);
+    }, [count]);
+    return display;
+}
+
+function Discarded({ index , card = 0, style = {}}) {
+    const [ display , setDisplay ] = useState('');
+    useEffect(() => {
+        if(card) {
+            // console.log('Draw Card', card);
+            style.transform = 'rotateX(75deg) rotateZ(' + Math.round(Math.random() * 200 - 150) + 'deg)';
+            setDisplay(e(Card, { key : index, number : card, style : style, dealt : '' }));
+            return;
+        }
+        setDisplay(e('div', { key : index , className : 'card', style : style}, ' '));
+    }, []);
+    return display;
 }
 
 function Players({user, players, playing, dealer, current, scores, hands}) {
-    let ordered = {...playing};
+    let ordered = playing.toReversed();
     let out = [];
     let found = false;
     for(let x in ordered) {

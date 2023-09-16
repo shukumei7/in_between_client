@@ -7,15 +7,11 @@ function CardHand({cards}) {
     // console.log('Load Cards', cards);
     setTimeout(() => {
         const hidden = $('.hand .dealt');
-        // console.log('Show Cards', cards.length, hidden.length);
-        if(hidden.length < 3) {
-            hidden.removeClass('dealt');
-            for(let x = 0; x < hidden.length; x++) {
-                setTimeout(() => {
-                    IBC.play('card', 'se');
-                }, x * 300);
-            }
-            return;
+        hidden.removeClass('dealt');
+        for(let x = 0; x < hidden.length; x++) {
+            setTimeout(() => {
+                IBC.play('card', 'se');
+            }, x * 300);
         }
     }, 300);
     let out = [];
@@ -26,7 +22,7 @@ function CardHand({cards}) {
     return e('div', { key : 'hand', className : 'hand' }, out);
 }
 
-export function Card({number}) {
+export function Card({number , style = {}, dealt = 'dealt'}) {
     let value = Math.round(number / 10);
     const suit = number % 5;
     let symbol = Clubs;
@@ -56,15 +52,15 @@ export function Card({number}) {
             break;
     }
     // console.log('Card', value, suit);
-    return (e('div', { key : 'card_' + number, className : 'card dealt' }, e(DisplayBox, { content : [
-        e('div', { key : 'number', className : 'number' }, value),
+    return (e('div', { key : 'card_' + number, className : 'card card_' + number + ' ' + dealt, style : style }, e(DisplayBox, { content : [
+        e('div', { key : 'number', className : 'number' }, '' + value),
         e(symbol, { key : 'suit' })
     ] })));
 }
 
 function Diamond() {
     return (
-        e('div', { className : 'diamond' }, [
+        e('div', { key : 'd', className : 'diamond' }, [
             e('div', { key : 1, className : 'square'})
         ])
     );
@@ -73,7 +69,7 @@ function Diamond() {
 
 function Heart() {
     return (
-        e('div', { className : 'heart' }, [
+        e('div', { key : 'h', className : 'heart' }, [
             e('div', { key : 1, className : 'square'}),
             e('div', { key : 2, className : 'circle1'}),
             e('div', { key : 3, className : 'circle2'})
@@ -84,7 +80,7 @@ function Heart() {
 
 function Spade() {
     return (
-        e('div', { className : 'spade' }, [
+        e('div', { key : 's', className : 'spade' }, [
             e('div', { key : 1, className : 'square'}),
             e('div', { key : 2, className : 'circle1'}),
             e('div', { key : 3, className : 'circle2'}),
@@ -96,7 +92,7 @@ function Spade() {
 
 function Clubs() {
     return (
-        e('div', { className : 'club' }, [
+        e('div', { key : 'c', className : 'club' }, [
             e('div', { key : 1, className : 'circle1'}),
             e('div', { key : 2, className : 'circle2'}),
             e('div', { key : 3, className : 'circle3'}),

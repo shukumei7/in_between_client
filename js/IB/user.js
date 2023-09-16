@@ -1,6 +1,6 @@
 import { Cookie , CookieConsent } from '../cookies.js';
 import IBC from '../ib.js';
-import { DisplayBox, FormBox } from './box.js';
+import { DisplayBox, FormBox, ErrorBox } from './box.js';
 
 const e = React.createElement;
 const useState = React.useState;
@@ -105,6 +105,7 @@ function UserUI({user, logout}) {
 
 function LoginUI({loginUser, close}) {
     const [ message, setMessage ] = useState('Enter your email and password');
+    const [ error, setError] = useState(null);
     const email_ID = 'email';
     const pass_ID = 'password';
     let buttons = [];
@@ -126,6 +127,15 @@ function LoginUI({loginUser, close}) {
         close();
         IBC.play('tick');
     }}, e(DisplayBox, { content : 'Close' , addClass : 'single center'})));
+    buttons.push(e('a', { key : 'show', className : 'button medium', onClick : () => {
+        IBC.play('tick');
+        const type = $('#' + pass_ID).attr('type');
+        if(type == 'password') {
+            $('#' + pass_ID).attr('type', 'text');
+            return;
+        }
+        $('#' + pass_ID).attr('type', 'password');
+    }}, e(DisplayBox, { key : 'close', content : 'Show' , addClass : 'single center'})));
     buttons.push(e('a', { key : 'login', className : 'button medium', onClick : () => {
         const email = $('#' + email_ID).val();
         IBC.play('tick');
@@ -143,9 +153,16 @@ function LoginUI({loginUser, close}) {
             password    : pass,
         }, (res) => {
             loginUser(res);
+        }, () => {
+            setError(e(ErrorBox, { key : 'error', message : 'Unable to log in', close : () => {
+                setError(null);
+            }}));
         });
     }}, e(DisplayBox, { content : 'Log In' , addClass : 'single center'})));
-    return e(FormBox, { inputs : inputs, buttons : buttons, size : 'quarter login'});
+    return [
+        e(FormBox, { key : 'form', inputs : inputs, buttons : buttons, size : 'quarter login'}),
+        error
+    ];
 }
 
 function RegistrationUI({loginUser, close}) {

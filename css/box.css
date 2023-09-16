@@ -75,6 +75,7 @@
         width: var(--line-width);
         height: calc(var(--box-height) + var(--line-tail));
         top: calc(-1 * var(--line-width));
+        bottom: 0;
     }
     &.box__line--left {
         left: 0;

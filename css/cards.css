@@ -4,7 +4,7 @@
     }
 }
 
-.hand, .open {
+.hand, .open, .discards {
     --box-height: 120px;
     --box-width: 90px;
     position: fixed;
@@ -23,7 +23,7 @@
         font-weight: bold;
         margin-right: 20px;
         transition: margin-left 2s;
-        &.dealt {
+        &.dealt, &.pass {
             margin-left: 150vw !important;
         }
     }

@@ -6,6 +6,7 @@ import CardHand from './cards.js';
 import PlayerAction from './play.js';
 import DisplayBox from './box.js';
 import GameInfo from './game.js';
+import Timer from './timer.js';
 
 const e = React.createElement;
 const useState = React.useState;
@@ -43,6 +44,13 @@ function IBCMain() {
         IBC.play('lounge', 'bgm');
         setInteraction(true);
     }
+
+    React.useEffect(() => {
+        if(room.id) {
+            // console.log('Call Game Updates', room);
+            checkGameStatus();
+        }
+    }, [room] );
 
     let out = [e(User, { key : 'user', user : user, updateDetails : (user, message, points) => {
         setUser(user);
@@ -84,14 +92,25 @@ function IBCMain() {
     }
 
     const checkGameStatus = () => {
-        if(!user.id) {
-            return;
-        }
-        if(!room.id) {
+        if(!user.id || !room.id) {
             setGame(emptyGame);
             return;
         }
+        // console.log('Request Game Updates');
         IBC.get(games, (status) => {
+            if(!user.id || !room.id) {
+                setGame(emptyGame);
+                return;
+            }
+            // check if kicked
+            // console.trace('Updates Received', user, room, status);
+            if(status.room_id != room.id) {
+                setRoom({
+                    id      : status.room_id,
+                    name    : status.room_name
+                });
+                return;
+            }
             // limit update when in turn
             updateGameData(status, status.current == user.id);
             if(status.current == user.id) {
@@ -106,7 +125,7 @@ function IBCMain() {
         });
     }
 
-    out.push(e(RoomNavigation, {key : 'navigation', room : room, activateUI : activateUI, enterRoom : (room, message) => {
+    out.push(e(RoomNavigation, {key : 'navigation', room : room, enterRoom : (room, message) => {
         setRoom(room);
         setMessage(message);
         checkGameStatus();
@@ -130,38 +149,14 @@ function IBCMain() {
         return out;
     }
 
-    if(!Object.keys(game.players).length) {
-        checkGameStatus();
-    }
-
     // show game info
     out.push(e(GameInfo, { key : 'game-info', user : user, game : game }));
 
     if(game.hand && game.hand.length) {
         out.push(e(CardHand, { key : 'hand' , cards : game.hand }));
-        if(game.hand.length == 3) {
-            setTimeout(() => {
-                const hidden = $('.hand .dealt');
-                // console.log('Check hidden', hidden.length);
-                if(hidden.length > 0) {
-                    return;
-                }
-                IBC.play('slide', 'se');
-                $('.hand .card').addClass('dealt'); // hide cards
-                setTimeout(() => {
-                    // console.log('Resuming updates');
-                    checkGameStatus(); // resume update game
-                }, 1000)
-            }, 5000);
-        }
     }
 
     if(game.current != user.id) {
-        if(IBC.alert) {
-            clearTimeout(IBC.alert);
-            IBC.alert = null;
-            setShowLogs(true);
-        }
         return out;
     }
 
@@ -169,20 +164,24 @@ function IBCMain() {
         IBC.play('bell', 'se');
         IBC.alert = setTimeout(() => {
             alert();
+            checkGameStatus();
         }, IBC.alertDelay);
     }
 
-    if(!IBC.alert) {
+    if(!IBC.alert && game.hand.length == 2) {
         alert();
+        // console.log('Hide logs', game.hand.length);
         setShowLogs(false);
     }
     const max_bet = IBC.getMaxBet(game.pot, points);
+    // console.log('Get Max Bet', max_bet, game.pot, points, IBC.restrict_bet);
     out.push(e(PlayerAction, { key : 'playbar', max_bet : max_bet, play : (bet) => {
         // console.log('Max Bet', max_bet);
         if(bet < 1 || bet > max_bet) {
             // error message
             return;
         }
+        IBC.clearAlert();
         $('.playbar').hide();
         IBC.post(games, {
             action  : 'play',
@@ -196,32 +195,41 @@ function IBCMain() {
             setGame(state); // controlled game update to show cards before clearing
             setMessage(res.message);
             setPoints(res.points);
-            if(res.message.includes('win')) {
-                for(let x = 0 ; x < bet; x++) {
-                    setTimeout(() => {
-                        IBC.play('gold', 'se');
-                    }, x * IBC.chipDelay);
-                }
-            } else {
-                for(let x = 0 ; x < bet; x++) {
-                    setTimeout(() => {
-                        IBC.play('chip', 'se');
-                    }, x * IBC.chipDelay);
-                }
-            }
+            IBC.chips(res.message.includes('win'), bet);
+            setTimeout(() => {
+                IBC.play('slide', 'se');
+                $('.hand .card').addClass('pass'); // hide cards
+                setTimeout(() => {
+                    //console.log('Update after play', res);
+                    updateGameData(res);
+                    checkGameStatus(); // resume update game
+                    setShowLogs(true);
+                }, 1500);
+            }, 3000)
         });
     }, pass : ()=> {
+        IBC.clearAlert();
         $('.playbar').hide();
-        $('.hand .card').addClass('dealt');
+        $('.hand .card').addClass('pass');
         IBC.play('slide', 'se');
         IBC.post(games, {
             action : 'pass'
         }, (res) => {
+            // console.log('Passed', res.hand);
             setTimeout(() => {
+                // console.log('Update after pass', res);
+                updateGameData(res);
                 checkGameStatus();
+                // console.log('Show logs');
+                setShowLogs(true);
             }, 1500);
         });
     }}));
+
+    const latest = (new Date(game.activities[game.activities.length - 1].time)).getTime();
+    const diff = (Date.now() - latest) / 1000;
+    // console.log('Time comparison', Date.now(), latest, diff);
+    out.push(e(Timer, { key : 'timer', percentage : (diff/ IBC.timeout) * 100}));
 
     return out;
 }

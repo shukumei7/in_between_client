@@ -6,12 +6,14 @@
 }
 .discards {
     --deck-distance: 1.2;
+    pointer-events: auto;
 }
 .deck, .hidden, .discards {
     --card-thickness: 0.5px;
     --card-slope: 0px;
     --card-width: 50px;
     --card-height: 90px;
+    --card-color: var(--sand-color);
     width: 100px; /* Adjust this width for spacing */
     >.card {
         width: calc(var(--card-width) * var(--deck-distance));
@@ -21,12 +23,15 @@
         left: 0;
         transform-origin: center center;
         transition: transform 0.3s ease-in-out; /* Add smooth transition effect */
-        background: white;
+        background: var(--card-color);
         border: 1px solid black;
         border-radius: 1vw;
         perspective: 1000px; /* Perspective for 3D effect */
         transform-style: preserve-3d;
         transform: rotateX(80deg) rotateZ(-40deg);
+        .diamond, .spade, .heart, .club {
+            --suit-size: 1px;
+        }
     }
     +.count {
         position: fixed;
