@@ -8,13 +8,16 @@ export function Timer({deadline}) {
 
     React.useEffect(() => {
         const diff = deadline - (Date.now() / 1000);
-        console.log('Set deadline', deadline, diff);
+        // console.log('Set deadline', deadline, diff);
         setTimed(diff);
     }, []);
 
     React.useEffect(() => {
         setTimeout(() => {
             setTime(time + 1);
+            if(timed > 0 && timed - time < IBC.alertDiff) {
+                IBC.play('bell');
+            }
         }, 1000);
     });
     // console.log('Render Timer', time, timed);

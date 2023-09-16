@@ -1,7 +1,6 @@
 .diamond, .spade, .heart, .club {
   --red-suit      : #c41010;
   --black-suit    : #444444;
-  --suit-size     : 0.16vw;
   width: calc(24*var(--suit-size));
   height: calc(24*var(--suit-size));
   margin: calc(4.5*var(--suit-size));

@@ -119,6 +119,7 @@ let IBC = {
     tickMax     : 10,
     alert       : null,
     alertDelay  : 30000,
+    alertDiff   : 10,
     chipDelay   : 100,
     clearAlert  : () => {
         clearTimeout(IBC.alert);

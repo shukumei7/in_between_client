@@ -6,13 +6,15 @@
 @import "timer.css";
 
 :root {
-    --logo-size: 15vw;
+    --logo-size: 160px;
     --single-height: 6vh;
     --log-transition: 1s;
     --log-height: 21.5vh;
     --message-down: -0.7vh;
     --message-up: 20vh;
     --placeholder-color: lightgrey;
+    --line-width: 6px;
+    --suit-size : 1.7px;
     --sand-color: 
         radial-gradient(ellipse farthest-corner at right bottom, #FEDB37 0%, #FDB931 8%, #9f7928 30%, #8A6E2F 40%, transparent 80%),
         radial-gradient(ellipse farthest-corner at left top, #FFFFFF 0%, #FFFFAC 8%, #D1B464 25%, #5d4a1f 62.5%, #5d4a1f 100%);
@@ -49,14 +51,19 @@ main {
     width: 100%;
     height: calc(100% - 20vh);
 }
-main, #logo, .info_user_name, .info_points, .room_name {
-    top: -1vh; /* 10vh */
+main, #logo, .info_user_name, .info_points {
+    top: calc(-1 * var(--line-width));
 }
+
+.room_name {
+    top: calc(var(--box-height) + 10px);
+}
+
 #logo {
-    left: -1vw;
+    left: calc(-1 * var(--line-width));
 }
 .info_activities, .info_message {
-    right: -20px;
+    right: calc(-1 * var(--line-width));
 }
 #logo, .info_user_name, .info_points, .info_message, .room_name {
     --box-height: var(--single-height);
@@ -80,32 +87,23 @@ main, #logo, .info_user_name, .info_points, .room_name {
 .room_name, .info_user_name {
     cursor: pointer;
 }
-.room_name {
-    --box-width: 23vw;
-    right: -1vh;
-}
-.info_user_name {
-    --box-width: 35vw;
-    left: 15vw;
+.room_name, .info_user_name {
+    --box-width: 250px;
+    right: calc(-1 * var(--line-width));
 }
 .info_points {
-    --box-width: 24vw;
-    left: 52vw;
+    --box-width: 200px;
+    right: 260px;
     justify-content: right;
 }
 .info_message, .info_activities {
     z-index: 5;
-    --box-width: 40vw;
+    --box-width: 400px;
 }
 .info_message {
     bottom: -0.7vh;
     cursor: pointer;
     transition: bottom var(--log-transition);
-}
-#logo > span {
-    position: relative;
-    top: -2.5vh;
-    color: white;
 }
 .info-container {
     font-size: 2vh;
@@ -276,7 +274,7 @@ div.login {
     &.bottom {
         position: fixed;
         bottom: -1vh;
-        left: 57vw;
+        right: calc(400px + var(--line-width));
     }
 }
 .button:active {
