@@ -44,6 +44,7 @@ main, #logo, .info, .actionbar {
     position: fixed;
 }
 main {
+    z-index: 1;
     left: 0;
     width: 100%;
     height: calc(100% - 20vh);
@@ -169,6 +170,10 @@ main, #logo, .info_user_name, .info_points, .room_name {
         margin-left: 19.4vw;
     }
     */
+}
+.modal .buttons {
+    position: absolute;
+    bottom: 5vh;
 }
 .buttons {
     padding: 0px 10px;
@@ -356,7 +361,7 @@ div.login {
 }
 
 .modal {
-    --box-height: 90vw;
+    --box-height: 90vh;
     --box-width: 90vw;
     z-index: 7;
     position: fixed;

@@ -134,7 +134,7 @@ $(() => {
         for(let x in res) {
             IBC[x] = res[x];
         }
-        console.log('Connected to API');
+        console.log('Server is UP');
         IBC.root = ReactDOM.createRoot(document.querySelector('main'));
         IBC.root.render(React.createElement(IBCMain));
     }, (xhr) => {

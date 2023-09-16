@@ -4,9 +4,10 @@ import BasicUI from './basic.js';
 import RoomNavigation from './rooms.js';
 import CardHand from './cards.js';
 import PlayerAction from './play.js';
-import DisplayBox from './box.js';
+import { DisplayBox, DialogBox } from './box.js';
 import GameInfo from './game.js';
 import Timer from './timer.js';
+import News from './news.js';
 
 const e = React.createElement;
 const useState = React.useState;
@@ -52,21 +53,20 @@ function IBCMain() {
         }
     }, [room] );
 
-    let out = [e(User, { key : 'user', user : user, updateDetails : (user, message, points) => {
+    let out = [];
+    
+    out.push(e(User, { key : 'user', user : user, updateDetails : (user, message, points) => {
         setUser(user);
         setMessage(message);
         setPoints(points);
-    }, activateUI : activateUI})];
+    }, activateUI : activateUI}));
 
     if(!user.id) {
         return out;
     }
 
     if(!interaction) {
-        return [
-            e('div', { key : 'blocker', className : 'blocker' }, ' '),
-            e('a', { key : 'rejoin', className : 'button login', onClick : activateUI}, e(DisplayBox, { content : 'Welcome Back', addClass : 'single center'}))
-        ];
+        return e(News, { close : activateUI });
     }
 
     const games = 'games';
@@ -129,18 +129,20 @@ function IBCMain() {
         setRoom(room);
         setMessage(message);
         checkGameStatus();
+        IBC.play('success');
     }, leaveRoom : () => {
         IBC.play('tick');
         setTimeout(() => {
             if(!confirm('Are you sure you want to leave this room?')) {
                 return;
             }
-            setRoom({
-                id      : 0,
-                name    : ''
-            });
             IBC.post(games, { action : 'leave' }, (res) => {
+                setRoom({
+                    id      : 0,
+                    name    : ''
+                });
                 updateGameData(res);
+                IBC.play('nudge');
             });
         }, 10);
     }}));

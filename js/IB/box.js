@@ -1,3 +1,5 @@
+import IBC from '../ib.js';
+
 const e = React.createElement;
 
 export function DisplayBox({content, addClass = '', css = {}}) {
@@ -7,6 +9,13 @@ export function DisplayBox({content, addClass = '', css = {}}) {
         e('div', { key : 'left', className : 'box__line box__line--left'}),
         e('div', { key : 'right', className : 'box__line box__line--right'}),
         e('div', { key : 'bottom', className : 'box__line box__line--bottom'})
+    ]);
+}
+
+export function DialogBox({content, size = '', style = {}}) {
+    return ([
+        e('div', { key : 'blocker', className : 'blocker' }, ' '), 
+        e('div', { key : 'modal', className : 'modal ' + size }, e(DisplayBox, { content : content}))
     ]);
 }
 
@@ -29,6 +38,13 @@ export function ErrorBox({message , close = null}) {
             buttons : close ? [ e('a', { key : 'button', className : 'button', onClick : close}, e(DisplayBox, { content : 'Close', addClass : 'single center' }))] : []
          }))
     ];
+}
+
+export function Button({ display , click , addClass = '', style = {}}) {
+    return e('a', { className : 'button ' + addClass, onClick : () => {
+        IBC.play('tick');
+        click();
+    }, style : style}, e(DisplayBox, { content : display , addClass : 'single center'}));
 }
 
 export default DisplayBox;
