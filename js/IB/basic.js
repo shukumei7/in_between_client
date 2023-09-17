@@ -9,6 +9,7 @@ const useEffect = React.useEffect;
 function BasicUI({user, points, message, activities, showLogs, setShowLogs}) {
     const [ bottom , setBottom ] = useState(true); 
     const [ div , setDiv ] = useState(null);
+
     let out = [];
     const checkBottom = () => {
         const $div = div ? div : $('.info_activities .content');
@@ -66,7 +67,7 @@ function BasicUI({user, points, message, activities, showLogs, setShowLogs}) {
         setShowLogs(false);
     }
 
-    out.push(e(Message, { key : 'message', message : message , bottom : showLogs ? IBC.message_up : IBC.message_down, toggle : () => {
+    out.push(e(Message, { key : 'message', message : message , bottom : showLogs ? 'var(--message-up)' : 'var(--message-down)', toggle : () => {
         IBC.play('tick');
         if(!activities.length) {
             if(showLogs) setShowLogs(false);

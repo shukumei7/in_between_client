@@ -1,6 +1,6 @@
 export const Cookie = {
-    set     : (cname, cvalue, exdays) => {
-        if(!CookieConsent.consented) {
+    set     : (cname, cvalue, exdays, force) => {
+        if(!CookieConsent.consented && !force) {
             return; // don't write if not consented
         }
         if(typeof exdays == 'undefined') {
@@ -10,6 +10,7 @@ export const Cookie = {
         d.setTime(d.getTime() + (exdays*24*60*60*1000));
         let expires = "expires="+ d.toUTCString();
         document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        // console.log('Cookie saved', cname, Cookie.get(cname));
     },
     delete  : (cname) => {
         const d = new Date();
@@ -30,6 +31,7 @@ export const Cookie = {
                 return c.substring(name.length, c.length);
             }
         }
+        // console.log('Cookie Not Found', cname, def);
         return def ? def : ''; // return default if cookie is not set
     }
 }
@@ -40,7 +42,7 @@ export const CookieConsent = {
     consented   : false,
     accept      : () => {
         Cookie.delete(CookieConsent.name);
-        Cookie.set(CookieConsent.name, 1, 30);
+        Cookie.set(CookieConsent.name, true, 30, true);
     },
     check       : () => {
         if(CookieConsent.consented = Cookie.get("user_cookie_consent")) {

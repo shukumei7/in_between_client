@@ -1,6 +1,8 @@
 .slider {
+    position: relative;
+    left: 5%;
     -webkit-appearance: none;
-    width: 100%;
+    width: 90%;
     height: 10px;
     border-radius: 5px;  
     background: var(--sand-color);
@@ -8,6 +10,7 @@
     opacity: 0.7;
     -webkit-transition: .2s;
     transition: opacity .2s;
+    padding: 0;
   }
   
   .slider::-webkit-slider-thumb {
@@ -40,6 +43,9 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    >label {
+        cursor: pointer;
+    }
   }
   
   /* Hide the browser's default checkbox */
@@ -55,10 +61,10 @@
   .checkmark {
     position: absolute;
     top: 0;
-    left: 0;
+    left: 250px;
     height: 25px;
     width: 25px;
-    background-color: #eee;
+    background-color: grey;;
   }
   
   /* On mouse-over, add a grey background color */
@@ -67,8 +73,8 @@
   }
   
   /* When the checkbox is checked, add a blue background */
-  .checkbox input:checked ~ .checkmark {
-    background-color: #2196F3;
+  .checkbox input:checked ~ .checkmark, .checkbox.checked .checkmark {
+    background: var(--sand-color);
   }
   
   /* Create the checkmark/indicator (hidden when not checked) */
@@ -79,7 +85,7 @@
   }
   
   /* Show the checkmark when checked */
-  .checkbox input:checked ~ .checkmark:after {
+  .checkbox input:checked ~ .checkmark:after, .checkbox.checked .checkmark:after {
     display: block;
   }
   

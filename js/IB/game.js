@@ -7,7 +7,7 @@ const useState = React.useState;
 const useEffect = React.useEffect;
 
 function GameInfo({user, game}) {
-    const [ showDiscards, setShowDiscards ] = React.useState(false)
+    const [ showDiscards, setShowDiscards ] = useState(false)
     return [
         e('div', { key : 'players', className : 'players' }, e(Players, { 
             user    : user,
@@ -70,6 +70,10 @@ function Deck({label, count , cards = []}) {
     useEffect(() => {
         let deck = [];
         deck.push(e('div', { key : 'count', className : 'count'}, label + count));
+        if(!IBC.graphics.decks) {
+            setDisplay(deck);
+            return;
+        }
         for(let x = 0 ; x < count; x++) {
             let style = {
                 top     : 'calc(' + x + ' * -1 * var(--card-thickness))',

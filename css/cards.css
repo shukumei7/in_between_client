@@ -29,7 +29,7 @@
         font-size: var(--card-font);
         font-weight: bold;
         margin-right: 20px;
-        transition: margin-left 2s;
+        transition: margin-left var(--card-transition);
         pointer-events: auto;
         &.dealt, &.pass {
             margin-left: 150vw !important;

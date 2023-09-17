@@ -14,11 +14,12 @@
     --line-color: rgba(255,223,0,1);
     --single-height: 6vh;
     --log-transition: 1s;
+    --card-transition: 2s;
     --log-height: 21.5vh;
     --log-up: calc(-1 * (var(--line-width)));
     --log-down: calc(-1 * (var(--log-height) + var(--line-width)));
-    --message-down: 14px; /*calc(-1 * var(--line-width));*/
     --message-up: 22.5vh;
+    --message-down: 14px;
     --placeholder-color: lightgrey;
     --line-width: 0.7vh;
     --line-tail: 1.5vh;
@@ -26,10 +27,9 @@
     --timer-width: 50px;
     --logo-size: calc(3*var(--single-height) - 2*var(--line-width));
     --edge-pos: calc(-1 * var(--line-width));
-    --small-font: 10pt;
-    --normal-font: 12pt;
-    --large-font: 14pt;
-    --font-size: var(--normal-font);
+    --small-font: 0.8em;
+    --large-font: 1.2em;
+    --font-size: 12;
     --card-font: 20pt;
     --sand-color: 
         radial-gradient(ellipse farthest-corner at right bottom, #FEDB37 0%, #FDB931 8%, #9f7928 30%, #8A6E2F 40%, transparent 80%),
@@ -91,6 +91,9 @@ main, #logo, .info_user_name {
     cursor: pointer;
     font-size: 0;
     z-index: 1;
+    .number {
+        font-size: 12pt;
+    }
 }
 .logo-row {
     width: 100%;
@@ -302,8 +305,12 @@ div.login {
         --box-height: 50px;
         --box-width: 180px;
     }
+    &.short .box, &.medium .box, &.short .content, &.medium .content {
+        overflow: hidden;
+    }
     &.short {
         --box-width: 70px;
+        
     }
     &.medium {
         --box-width: 120px;
@@ -458,7 +465,7 @@ div.login {
 }
 
 .discards {
-    transition: top 1s, left 1s;
+    transition: top var(--log-transition), left var(--log-transition);
 }
   
 @media only screen and (max-width: 900px) {

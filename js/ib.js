@@ -9,12 +9,10 @@ let IBC = {
     cookie_token    : 'login_token',
     cookie_days     : 30,
     bet_id          : 'play-bet',
-    message_up      : 'var(--message-up)',
-    message_down    : 'var(--message-down)',
     log_up          : 'var(--log-up)',
     log_down        : 'var(--log-down)',
     log_height      : 'var(--log-height)',
-    font_size       : 12,
+    font_size       : 14,
     card_fs         : 20,
     refresh_rate    : 5000,
     previous        : [],
@@ -90,9 +88,9 @@ let IBC = {
         se      : 1,
         bgm     : 0.3,
         tick    : 1,
-        alert   : 1,
+        bell    : 1,
         get     : (channel , volume) => {
-            return IBC.volume.master * IBC.volume[channel] * (typeof volume == 'number' ? volume : 1);
+            return IBC.volume.master * IBC.volume[channel] * (typeof volume != 'undefined' ? volume : 1);
         },
         adjust  : () => {
             const audio = IBC.sounds.playing;
@@ -120,7 +118,11 @@ let IBC = {
         if(typeof channel == 'undefined') {
             channel = 'se';
         }
+        if(['tick', 'bell'].includes(sound)) {
+            volume = IBC.volume[sound];
+        }
         const vol = IBC.volume.get(channel, volume);
+        // console.log('Play Sound', sound, channel, volume, vol);
         if(channel == 'se') {
             let audio = IBC.sounds[sound].cloneNode();
             audio.volume = vol;
@@ -147,9 +149,21 @@ let IBC = {
         }
     },
     graphics    : {
-        decks       : true,
-        animations  : true,
-        bg          : true
+        decks           : true,
+        animations      : true,
+        bg              : true,
+        log             : '1s',
+        card            : '1s',
+        setAnimations   : (val) => {
+            if(typeof val != 'undefined') {
+                IBC.graphics.animations = val = val ? 1 : 0;
+                Cookie.set(IBC.cookies.anim, val, IBC.cookie_days);
+            }
+            $(':root').css({
+                '--log-transition'  : IBC.graphics.animations ? IBC.graphics.log : 0,
+                '--card-transition' : IBC.graphics.animations ? IBC.graphics.card : 0
+            });
+        }
     },
     tick        : null,
     tickSpeed   : 500,
@@ -162,6 +176,16 @@ let IBC = {
     clearAlert  : () => {
         clearTimeout(IBC.alert);
         IBC.alert = null;
+    },
+    updateFont  : (val) => {
+        if(val) {
+            IBC.font_size = val;
+        }
+        $(':root').css({
+            '--font-size'       : IBC.font_size,
+            '--message-down'    : 1.11 * IBC.font_size + -3.57,
+            '--message-up'      : 1.21 * IBC.font_size + 165.86
+        });
     }
 }
 
@@ -180,14 +204,15 @@ $(() => {
         IBC.options = ReactDOM.createRoot(document.querySelector('#options'));
         IBC.options.render(React.createElement(Options));
         // load cookie options
-        IBC.font_size = Cookie.get(IBC.cookies.font, IBC.font_size);
+        IBC.updateFont(Cookie.get(IBC.cookies.font, IBC.font_size));
         IBC.volume.master = Cookie.get(IBC.cookies.master, IBC.volume.master);
         IBC.volume.se = Cookie.get(IBC.cookies.se, IBC.volume.se);
         IBC.volume.bgm = Cookie.get(IBC.cookies.bgm, IBC.volume.bgm);
-        IBC.volume.tick = Cookie.get(IBC.cookies.tick, IBC.volume.tick);
-        IBC.volume.alert = Cookie.get(IBC.cookies.alert, IBC.volume.alert);
-        IBC.graphics.animations = Cookie.get(IBC.cookies.anim, IBC.graphics.animations);
-        IBC.graphics.decks = Cookie.get(IBC.cookies.decks, IBC.graphics.deck);
+        IBC.volume.tick = Cookie.get(IBC.cookies.tick, IBC.volume.tick) > 0 ? 1 : 0;
+        IBC.volume.bell = Cookie.get(IBC.cookies.alert, IBC.volume.bell) > 0 ? 1 : 0;
+        Cookie.get(IBC.cookies.anim, IBC.graphics.animations);
+        IBC.graphics.setAnimations();
+        IBC.graphics.decks = Cookie.get(IBC.cookies.decks, IBC.graphics.decks);
         IBC.graphics.bg = Cookie.get(IBC.cookies.bg, IBC.graphics.bg);
     }, (xhr) => {
         const message = 'Could not connect to server. Try again by refreshing this page later';

@@ -11,10 +11,13 @@ import News from './news.js';
 
 const e = React.createElement;
 const useState = React.useState;
+const useEffect = React.useEffect;
 
 function IBCMain() {
+    const [ display , setDisplay ]  = useState('');
     const [ interaction , setInteraction ] = useState(false);
     const [ showLogs , setShowLogs ] = useState(false);
+    const [ showTimer , setShowTimer ] = useState(false);
     const [ points , setPoints ] = useState(0);
     const [ message , setMessage ] = useState(0);
     const [ user , setUser ] = useState({
@@ -40,25 +43,33 @@ function IBCMain() {
     };
     const [ game , setGame ] = useState(emptyGame);
 
+    const games = 'games';
+
     const activateUI = () => {
         IBC.play('tick');
         IBC.play('lounge', 'bgm');
         setInteraction(true);
     }
 
-    React.useEffect(() => {
+    useEffect(() => {
         if(room.id) {
             // console.log('Call Game Updates', room);
             checkGameStatus();
         }
     }, [room] );
 
+    useEffect(() => {
+        const isTurn = game.current == user.id;
+        setShowLogs(!isTurn);
+        setShowTimer(isTurn);
+    }, [game.current]);
+
     if(!interaction) {
         return e(News, { close : activateUI });
     }
 
     let out = [];
-    
+
     out.push(e(User, { key : 'user', user : user, updateDetails : (user, message, points) => {
         setUser(user);
         setMessage(message);
@@ -68,8 +79,6 @@ function IBCMain() {
     if(!user.id) {
         return out;
     }
-
-    const games = 'games';
 
     out.push(e(BasicUI, {
         key         : 'basic',
@@ -113,6 +122,7 @@ function IBCMain() {
             }
             // limit update when in turn
             updateGameData(status, status.current == user.id);
+            IBC.play('lounge', 'bgm');
             if(status.current == user.id) {
                 // console.log('Stop updates on turn');
                 return;
@@ -136,6 +146,7 @@ function IBCMain() {
             if(!confirm('Are you sure you want to leave this room?')) {
                 return;
             }
+            IBC.clearAlert();
             IBC.post(games, { action : 'leave' }, (res) => {
                 setRoom({
                     id      : 0,
@@ -162,28 +173,16 @@ function IBCMain() {
         return out;
     }
 
-    const alert = () => {
-        IBC.play('bell', 'se');
-        IBC.alert = setTimeout(() => {
-            alert();
-            checkGameStatus();
-        }, IBC.alertDelay);
-    }
-
-    if(!IBC.alert && game.hand.length == 2) {
-        alert();
-        // console.log('Hide logs', game.hand.length);
-        setShowLogs(false);
-    }
     const max_bet = IBC.getMaxBet(game.pot, points);
     // console.log('Get Max Bet', max_bet, game.pot, points, IBC.restrict_bet);
-    out.push(e(PlayerAction, { key : 'playbar', max_bet : max_bet, play : (bet) => {
+    out.push(e(PlayerAction, { key : 'playbar', turn : game.current == user.id, max_bet : max_bet, play : (bet) => {
         // console.log('Max Bet', max_bet);
         if(bet < 1 || bet > max_bet) {
             // error message
             return;
         }
         IBC.clearAlert();
+        setShowTimer(false);
         $('.playbar').hide();
         IBC.play('tick');
         IBC.post(games, {
@@ -206,12 +205,12 @@ function IBCMain() {
                     //console.log('Update after play', res);
                     updateGameData(res);
                     checkGameStatus(); // resume update game
-                    setShowLogs(true);
                 }, 1200);
             }, 3000)
         });
     }, pass : ()=> {
         IBC.clearAlert();
+        setShowTimer(false);
         $('.playbar').hide();
         $('.hand .card').addClass('pass');
         IBC.play('slide', 'se');
@@ -225,10 +224,18 @@ function IBCMain() {
                 updateGameData(res);
                 checkGameStatus();
                 // console.log('Show logs');
-                setShowLogs(true);
+                (true);
             }, 1200);
         });
     }}));
+
+    if(!showTimer) {
+        if($('.playbar').is(':visible')) {
+            console.log('Show timer and hide logs');
+            setShowTimer(true);
+        }
+        return out;
+    }
 
     const ignore = ['join', 'leave', 'kick'];
     const previous = game.activities.slice(-10); // guaranteed hit

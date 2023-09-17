@@ -2,24 +2,30 @@ import IBC from '../ib.js';
 import DisplayBox from "./box.js";
 
 const e = React.createElement;
+const s = React.useState;
+const f = React.useEffect;
 
-function CardHand({cards}) {
+export function CardHand({cards}) {
+    const [ display , setDisplay ] = s([]);
     // console.log('Load Cards', cards);
-    setTimeout(() => {
-        const hidden = $('.hand .dealt');
-        hidden.removeClass('dealt');
-        for(let x = 0; x < hidden.length; x++) {
-            setTimeout(() => {
-                IBC.play('card', 'se');
-            }, x * 300);
+    f(() => {
+        setTimeout(() => {
+            const hidden = $('.hand .dealt');
+            hidden.removeClass('dealt');
+            for(let x = 0; x < hidden.length; x++) {
+                setTimeout(() => {
+                    IBC.play('card');
+                }, x * 200);
+            }
+        }, 200);
+        let out = [];
+        for(let x in cards) {
+            const number = cards[x];
+            out.push(e(Card, { key : 'card_' + number, number : number }));
         }
-    }, 300);
-    let out = [];
-    for(let x in cards) {
-        const number = cards[x];
-        out.push(e(Card, { key : 'card_' + number, number : number }));
-    }
-    return e('div', { key : 'hand', className : 'hand' }, out);
+        setDisplay(e('div', { key : 'hand', className : 'hand' }, out));
+    }, [cards]);
+    return display;    
 }
 
 export function Card({number , style = {}, dealt = 'dealt'}) {
