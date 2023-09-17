@@ -46,22 +46,10 @@ function BasicUI({user, points, message, activities, showLogs, setShowLogs}) {
         });
     }
     out.push(e(Points, { key : 'points', points : points}));
-    out.push(e(Message, { key : 'message', message : message , bottom : showLogs ? IBC.message_up : IBC.message_down, toggle : () => {
-        IBC.play('tick');
-        if(!activities.length) {
-            if(showLogs) setShowLogs(false);
-            return;
-        }
-        setShowLogs(!showLogs);
-        if(showLogs) return;
-        scrollBottom();
-        setBottom(true);
-    }}));
 
     if(activities.length) {
         out.push(e('div', { key : 'activities', className : 'info info_activities ' + (showLogs ? '' : 'compress'), style : {
-            '--box-height'  : showLogs ? IBC.log_height : 0,
-            top             : showLogs ? IBC.log_up : IBC.log_down
+            bottom             : showLogs ? IBC.log_up : IBC.log_down
         } }, e(DisplayBox, { content : e(Activities, { user : user, activities : activities, scrollBottom : () => {
             if(bottom) scrollBottom();
         }})})));
@@ -77,6 +65,19 @@ function BasicUI({user, points, message, activities, showLogs, setShowLogs}) {
     } else if(showLogs) {
         setShowLogs(false);
     }
+
+    out.push(e(Message, { key : 'message', message : message , bottom : showLogs ? IBC.message_up : IBC.message_down, toggle : () => {
+        IBC.play('tick');
+        if(!activities.length) {
+            if(showLogs) setShowLogs(false);
+            return;
+        }
+        setShowLogs(!showLogs);
+        if(showLogs) return;
+        scrollBottom();
+        setBottom(true);
+    }}));
+
     return (out);
 }
 
@@ -169,7 +170,7 @@ function Points({ points }) {
     const [ display , setDisplay ] = useState('');
     useEffect(() => {
         // console.log('Update Points', points);
-        setDisplay(e('div', { className : 'info info_points' }, e(DisplayBox, { content : points, addClass : 'single right' })));
+        setDisplay(e('div', { className : 'info info_points' }, e(DisplayBox, { content : points + ' point' + (points == 1? '' : 's'), addClass : 'single right' })));
     }, [points]);
     return display;
 }
@@ -178,9 +179,12 @@ function Message({ message , bottom, toggle }) {
     const [ display , setDisplay ] = useState('');
     useEffect(() => {
         // console.log('Update Message', message);
-        setDisplay(e('a', { key : 'message', className : 'info info_message', style : {
+        setDisplay(e('div', { key : 'message', className : 'info info_message', style : {
             bottom : bottom
-        }, onClick : toggle}, e(DisplayBox, { content : message, addClass : 'single'})));
+        }}, [
+            e('div', { key : 'note' , className : 'message' }, 'Click to show more activity'),
+            e('a', { key : 'message', className : 'body', onClick : toggle}, e(DisplayBox, { content : message, addClass : 'single'}))
+        ]));
     }, [message, bottom]);
     return display;
     

@@ -34,12 +34,14 @@ function PlayerAction({max_bet, play, pass}) {
     return e('div', { key : 'playbar', className : 'playbar' }, [
         e('div', { key : 1 }, [
             e('div', { key : 'bet', className : 'bet input' } , e(DisplayBox, { content : e('input', { key : 'bet', id : IBC.bet_id, type : 'number', step : 1, min : 1, max : max_bet })})),
-            e('a', { key : 'play', className : 'button short', title : 'Play', onClick : () => {
+            e('a', { key : 'play', className : 'button medium', title : 'Play', onClick : () => {
                 play($('#' + IBC.bet_id).val());
-            }}, e(DisplayBox, { content : e('i', { className : 'arrow right', style : {
-                borderColor : 'green',
-                color       : 'black'
-            }}, ''), addClass : 'single center'}))
+            }}, e(DisplayBox, { content : [
+                e('span', { key : 'text' }, 'Play '), 
+                e('i', { key : 'arrow', className : 'arrow right', style : {
+                    borderColor : 'green'
+                }}, '')
+            ], addClass : 'single center'}))
         ]),
         e('div', { key : 2 }, [
             e('a', { key : 'add', className : 'button short', title : 'Increase bet', onClick : () => {
@@ -62,15 +64,16 @@ function PlayerAction({max_bet, play, pass}) {
                     changeBet(-1 * IBC.tickCount);
                 }, IBC.tickSpeed);
             }, onMouseUp : () => stopTick}, e(DisplayBox, { content : e('i', { className : 'arrow down'}), addClass : 'single center'})),
-            e('a', { key : 'pass', className : 'button short', title : 'Pass', onClick : () => {
+            e('a', { key : 'pass', className : 'button medium', title : 'Pass', onClick : () => {
                 pass();
             }}, e(DisplayBox, { content : [
-                e('i', { key : 1, className : 'arrow down', style : {
-                    borderColor: 'red'
-                }}),
-                e('i', { key : 2, className : 'arrow up', style : {
-                    borderColor: 'red'
-                }})
+                e('span', { key : 'text' }, 'Pass  '),
+                e('b', { key : 1, className : '', style : {
+                    color: 'red',
+                    fontSize: '20pt',
+                    float: 'right',
+                    marginLeft : '5px'
+                }}, 'X')
             ], addClass : 'single center'}))
         ])
     ]);

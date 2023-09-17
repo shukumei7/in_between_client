@@ -46,7 +46,7 @@ function GameInfo({user, game}) {
 function Discards({cards, show}) {
     // console.log('Update Discards', cards.length);
     if(!show) {
-        return e(Deck, { key : 'discards', count : cards.length, label : 'Played: ', cards : cards});
+        return e(Deck, { key : 'discards', count : cards.length, label : 'Click to view Played: ', cards : cards});
     }
     if(!$('.open').length) {
         setTimeout(() => {
@@ -61,6 +61,7 @@ function Discards({cards, show}) {
     return [
         e('div', { key : 'blocker', className : 'blocker' }, ' '),
         e('div', { key : 'open', className : 'open' }, out),
+        e('div', { key : 'message', className : 'message'}, 'These are discarded when players "Play". Scroll to the side to view more. Click anywhere to close.')
     ];
 }
 

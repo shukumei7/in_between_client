@@ -8,16 +8,22 @@
 :root {
     --red-suit      : #c41010;
     --black-suit    : #444444;
-    --logo-size: 160px;
+    --box-height: 200px;
+    --box-width: 400px;
+    --line-color: rgba(255,223,0,1);
     --single-height: 6vh;
     --log-transition: 1s;
     --log-height: 21.5vh;
-    --message-down: -0.7vh;
-    --message-up: 20vh;
+    --log-up: calc(-1 * (var(--line-width)));
+    --log-down: calc(-1 * (var(--log-height) + var(--line-width)));
+    --message-down: 14px; /*calc(-1 * var(--line-width));*/
+    --message-up: 22.5vh;
     --placeholder-color: lightgrey;
     --line-width: 0.7vh;
     --line-tail: 1.5vh;
-    --suit-size : 1.7px;
+    --suit-size : 1.4px;
+    --timer-width: 50px;
+    --logo-size: calc(3*var(--single-height) - 2*var(--line-width));
     --sand-color: 
         radial-gradient(ellipse farthest-corner at right bottom, #FEDB37 0%, #FDB931 8%, #9f7928 30%, #8A6E2F 40%, transparent 80%),
         radial-gradient(ellipse farthest-corner at left top, #FFFFFF 0%, #FFFFAC 8%, #D1B464 25%, #5d4a1f 62.5%, #5d4a1f 100%);
@@ -59,7 +65,7 @@ main, #logo, .info_user_name {
     top: calc(-1 * var(--line-width));
 }
 .room_name {
-    top: calc(2 *(var(--box-height) + 13px));
+    top: calc(2 *var(--box-height) - var(--line-width) * 3);
 }
 #logo {
     left: calc(-1 * var(--line-width));
@@ -81,6 +87,18 @@ main, #logo, .info_user_name {
     width: 100%;
     text-align: center;
     padding-top: 10px;
+    .number {
+        color: white;
+        font-weight: bold;
+        position: relative;
+        font-size: 10pt;
+        top: 18px;
+        left: 14px;
+        transform: translate(
+            -50%,
+            -50%
+        )   
+    }
 }
 .info {
     width: var(--box-width);
@@ -96,7 +114,7 @@ main, #logo, .info_user_name {
 }
 
 .info_points {
-    top: calc(var(--box-height) + 10px);
+    top: calc(var(--box-height)  - 2 * var(--line-width));
     justify-content: right;
 }
 .info_message, .info_activities {
@@ -105,9 +123,14 @@ main, #logo, .info_user_name {
     pointer-events: auto;
 }
 .info_message {
-    bottom: -0.7vh;
+    bottom: var(--message-down);
     cursor: pointer;
-    transition: bottom var(--log-transition);
+    transition: bottom var(--log-transition) linear;
+    .message {
+        color: lightgray;
+        text-align: right;
+        margin-right: var(--line-width);
+    }
 }
 .info-container {
     font-size: 2vh;
@@ -124,7 +147,7 @@ main, #logo, .info_user_name {
 }
 .info_activities {
     --box-height: var(--log-height);
-    bottom: -0.6vh;
+    bottom: var(--log-up);
     .content div {
         padding-top: 20px;
     }
@@ -144,7 +167,7 @@ main, #logo, .info_user_name {
     }
 }
 .info_activities, .info_activities .box__line, .box__line--bottom::before, .box__line--bottom::after, .box__line--top::before, .box__line--top::after {
-    transition: height var(--log-transition), top var(--log-transition), bottom var(--log-transition);
+    transition: bottom var(--log-transition) linear;
 }
 .actionbar {
     right: -1vh;

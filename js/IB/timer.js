@@ -11,8 +11,8 @@ export function Timer({deadline}) {
         // console.log('Set deadline', deadline, diff);
         setTimed(diff);
         setTimeout(() => {
-            $('.sand').css('transition', 'top 1s linear 1s');
-        }, 300);
+            $('.sand').css('transition', 'top 1s linear');
+        }, 1200);
     }, []);
 
     React.useEffect(() => {

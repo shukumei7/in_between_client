@@ -1,9 +1,4 @@
 /* Author Rob DiMarzo */
-:root {
-    --box-height: 200px;
-    --box-width: 400px;
-    --line-color: rgba(255,223,0,1);
-}
 .box {
     --content-pad: 20px;
     background-color: #111111;

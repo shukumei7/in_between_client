@@ -2,7 +2,7 @@
     position: fixed;
     top: 50vh;
     left: 5px;
-    width: 50px;
+    width: var(--timer-width);
     height: 49vh;
     border: 1px solid white;
     border-radius: 1vw;

@@ -10,7 +10,7 @@ function RoomNavigation({room, enterRoom, leaveRoom}) {
     const [ display , setDisplay] = useState('');
     useEffect(() => {
         // console.log('Update in Room', room);
-        setDisplay(e('div', { key : 'room name', className : 'info room_name', onClick : leaveRoom }, e(DisplayBox, { content : room.name , addClass : 'single center' })));
+        setDisplay(e('div', { key : 'room name', className : 'info room_name', onClick : leaveRoom }, e(DisplayBox, { content : room.name , addClass : 'single right' })));
     }, [room.id]);
     
     const [ showButtons , setShowButtons ] = useState(false);

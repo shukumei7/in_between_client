@@ -233,7 +233,7 @@ function IBCMain() {
     let last = null;
     while((last = previous.pop()) && ignore.includes(last.action));
     if(!last) last = { time : Date.now()};
-    // console.log('Start from', last);
+    // console.log('Start from', last, previous);
     const time = last.time;
     const ms = (new Date(time)).getTime();
     const seconds = ms / 1000;

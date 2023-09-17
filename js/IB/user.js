@@ -111,7 +111,7 @@ function UserUI({user, logout}) {
             Cookie.set(IBC.cookie_id, 0);
             Cookie.set(IBC.cookie_token, '');
             logout();
-        } }, e(DisplayBox, { content : user.name, addClass : 'single center' })));
+        } }, e(DisplayBox, { content : user.name, addClass : 'single right' })));
     }, []);
     return display;
 }
