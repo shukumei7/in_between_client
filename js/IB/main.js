@@ -53,6 +53,10 @@ function IBCMain() {
         }
     }, [room] );
 
+    if(!interaction) {
+        return e(News, { close : activateUI });
+    }
+
     let out = [];
     
     out.push(e(User, { key : 'user', user : user, updateDetails : (user, message, points) => {
@@ -63,10 +67,6 @@ function IBCMain() {
 
     if(!user.id) {
         return out;
-    }
-
-    if(!interaction) {
-        return e(News, { close : activateUI });
     }
 
     const games = 'games';
@@ -185,6 +185,7 @@ function IBCMain() {
         }
         IBC.clearAlert();
         $('.playbar').hide();
+        IBC.play('tick');
         IBC.post(games, {
             action  : 'play',
             bet     : bet
@@ -214,6 +215,7 @@ function IBCMain() {
         $('.playbar').hide();
         $('.hand .card').addClass('pass');
         IBC.play('slide', 'se');
+        IBC.play('tick');
         IBC.post(games, {
             action : 'pass'
         }, (res) => {

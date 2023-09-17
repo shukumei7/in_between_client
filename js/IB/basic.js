@@ -182,7 +182,7 @@ function Message({ message , bottom, toggle }) {
         setDisplay(e('div', { key : 'message', className : 'info info_message', style : {
             bottom : bottom
         }}, [
-            e('div', { key : 'note' , className : 'message' }, 'Click to show more activity'),
+            (IBC.showHelp ? e('div', { key : 'note' , className : 'message' }, 'Click to show more activity') : ''),
             e('a', { key : 'message', className : 'body', onClick : toggle}, e(DisplayBox, { content : message, addClass : 'single'}))
         ]));
     }, [message, bottom]);

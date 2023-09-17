@@ -40,10 +40,8 @@ export default function User({user, updateDetails, activateUI }) {
             id      : res.user_id,
             name    : res.user_name
         }, res.message, res.points);
-        if(CookieConsent.consented) {
-            Cookie.set(IBC.cookie_id, res.user_id);
-            Cookie.set(IBC.cookie_token, res.token);
-        }
+        Cookie.set(IBC.cookie_id, res.user_id, IBC.cookie_days);
+        Cookie.set(IBC.cookie_token, res.token, IBC.cookie_days);
     }
 
     const checkCookieLogin = () => {
@@ -85,7 +83,7 @@ export default function User({user, updateDetails, activateUI }) {
         }});
     }
 
-    return (e('div', { key : 1, className : 'login'}, [
+    return (e('div', { key : 1, className : 'login buttons'}, [
             e('a', { key : 'guest', className : "button", onClick : () => {
                 activateUI();
                 IBC.post(accounts, loginUser);
@@ -293,7 +291,6 @@ function RegistrationUI({loginUser, close}) {
             IBC.play('tick');
             setEmail(null);
             setMessage(email_default);
-            setSize('');
             setAvailable(false);
         }}, e(DisplayBox, { key : 'close', content : 'Back' , addClass : 'single center'})));
         buttons.push(e('a', { key : 'show', className : 'button medium', onClick : () => {
@@ -312,7 +309,6 @@ function RegistrationUI({loginUser, close}) {
             IBC.play('tick');
             setPassword(null);
             setMessage(pass_default);
-            setSize('square');
             setAvailable(false);
         }}, e(DisplayBox, { content : 'Back' , addClass : 'single center'})));
     }
@@ -323,16 +319,16 @@ function RegistrationUI({loginUser, close}) {
             if(!name) {
                 setName($('#' + user_ID).val());
                 setMessage(email_default);
+                setAvailable(false);
                 return;
             } else if(!email) {
                 setEmail($('#' + email_ID).val());
                 setMessage(pass_default);
-                setSize('square');
+                setAvailable(false);
                 return;
             } else if(!password) {
                 setPassword($('#' + pass_ID).val());
                 setMessage('Verify your information');
-                setSize('');
             } else {
                 IBC.post(accounts, {
                     name        : name,

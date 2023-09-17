@@ -26,7 +26,7 @@
         display: inline-block;
         height: var(--box-height);
         width: var(--box-width);
-        font-size: 20pt;
+        font-size: var(--card-font);
         font-weight: bold;
         margin-right: 20px;
         transition: margin-left 2s;

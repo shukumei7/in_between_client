@@ -1,5 +1,11 @@
 export const Cookie = {
     set     : (cname, cvalue, exdays) => {
+        if(!CookieConsent.consented) {
+            return; // don't write if not consented
+        }
+        if(typeof exdays == 'undefined') {
+            exdays = 30;
+        }
         const d = new Date();
         d.setTime(d.getTime() + (exdays*24*60*60*1000));
         let expires = "expires="+ d.toUTCString();
@@ -11,7 +17,7 @@ export const Cookie = {
         let expires = "expires="+ d.toUTCString();
         document.cookie = cname + "=;" + expires + ";path=/";
     },
-    get     : (cname) => {
+    get     : (cname, def) => {
         let name = cname + "=";
         let decodedCookie = decodeURIComponent(document.cookie);
         let ca = decodedCookie.split(';');
@@ -24,7 +30,7 @@ export const Cookie = {
                 return c.substring(name.length, c.length);
             }
         }
-        return "";
+        return def ? def : ''; // return default if cookie is not set
     }
 }
 
@@ -108,6 +114,9 @@ export const CookieConsent = {
         body.appendChild(container);
     }
 }
+
+export default Cookie;
+globalThis.Cookie = Cookie;
 
 $(() => {
 	CookieConsent.check();

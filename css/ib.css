@@ -2,6 +2,7 @@
 @import "box.css";
 @import "cards.css";
 @import "deck.css";
+@import "options.css";
 @import "suits.css";
 @import "timer.css";
 
@@ -24,6 +25,12 @@
     --suit-size : 1.4px;
     --timer-width: 50px;
     --logo-size: calc(3*var(--single-height) - 2*var(--line-width));
+    --edge-pos: calc(-1 * var(--line-width));
+    --small-font: 10pt;
+    --normal-font: 12pt;
+    --large-font: 14pt;
+    --font-size: var(--normal-font);
+    --card-font: 20pt;
     --sand-color: 
         radial-gradient(ellipse farthest-corner at right bottom, #FEDB37 0%, #FDB931 8%, #9f7928 30%, #8A6E2F 40%, transparent 80%),
         radial-gradient(ellipse farthest-corner at left top, #FFFFFF 0%, #FFFFAC 8%, #D1B464 25%, #5d4a1f 62.5%, #5d4a1f 100%);
@@ -37,9 +44,10 @@ body {
     background-image: url('../img/bg.jpg');
     background-position: center;
     background-size: cover;
+    background-repeat: no-repeat;
     background-blend-mode: color-dodge;
     font-family: Verdana;
-    font-size: 12pt;
+    font-size: var(--font-size);
 }
 .blocker {
     position: fixed;
@@ -50,6 +58,7 @@ body {
     background: black;
     opacity: 0.4;
     z-index: 4;
+    pointer-events: auto;
 }
 main, #logo, .info, .actionbar {
     position: fixed;
@@ -62,16 +71,16 @@ main {
     pointer-events: none;
 }
 main, #logo, .info_user_name {
-    top: calc(-1 * var(--line-width));
+    top: var(--edge-pos);
 }
 .room_name {
     top: calc(2 *var(--box-height) - var(--line-width) * 3);
 }
 #logo {
-    left: calc(-1 * var(--line-width));
+    left: var(--edge-pos);
 }
 .info_activities, .info_message, .info_points {
-    right: calc(-1 * var(--line-width));
+    right: var(--edge-pos);
 }
 #logo, .info_user_name, .info_points, .info_message, .room_name {
     --box-height: var(--single-height);
@@ -91,7 +100,7 @@ main, #logo, .info_user_name {
         color: white;
         font-weight: bold;
         position: relative;
-        font-size: 10pt;
+        font-size: var(--small-font);
         top: 18px;
         left: 14px;
         transform: translate(
@@ -110,7 +119,7 @@ main, #logo, .info_user_name {
 }
 .room_name, .info_user_name, .info_points {
     --box-width: 250px;
-    right: calc(-1 * var(--line-width));
+    right: var(--edge-pos);
 }
 
 .info_points {
@@ -133,7 +142,6 @@ main, #logo, .info_user_name {
     }
 }
 .info-container {
-    font-size: 2vh;
     width: 0;
     top: 0;
     right: 0;
@@ -241,7 +249,7 @@ input {
     outline: none;
     border: 0;
     padding: 2vh 2vw;
-    font-size: 15pt;
+    font-size: var(--large-font);
 }
 .bet input {
     width: 100%;
@@ -273,12 +281,12 @@ input {
     left:50%;
     transform: translate(-50%, -50%);
     z-index: 5;
+    white-space: normal;
     &.bottom {
         top: 90%;
     }
     .button {
-        margin-right: 20px;
-        margin-bottom: 30px;
+        margin-bottom: 10px;
     }
 }
 
@@ -302,7 +310,7 @@ div.login {
     }
     &.bottom {
         position: fixed;
-        bottom: -1vh;
+        bottom: var(--edge-pos);
         right: calc(400px + var(--line-width));
     }
 }
@@ -322,6 +330,7 @@ div.login {
 }
 .pot {
     top: 70%;
+    z-index: 3
 }
 .deck {
     --deck-distance: 1.2;
@@ -447,4 +456,83 @@ div.login {
 ::-ms-input-placeholder { /* Microsoft Edge */
     color: var(--placeholder-color);
 }
+
+.discards {
+    transition: top 1s, left 1s;
+}
   
+@media only screen and (max-width: 900px) {
+    body {
+        background-position-x: -514px;
+        background-size: 1390px;
+    }
+    .pot {
+        left: 100px;
+    }
+    .deck {
+        left: 167px;
+    }
+    .hidden {
+        left: 262px;
+    }
+    .discards {
+        left: 370px;
+        >.count {
+            margin-top: -30px;
+            white-space: normal;
+        }
+    }
+}
+@media only screen and (max-height: 560px) {
+    body {
+        background-position-y: -128px;
+    }
+    .pot {
+        top: 315px;
+    }
+}
+@media only screen and (max-height: 400px) {
+    body {
+        background-position-y: -316px;
+    }
+    .players {
+        top: 22vh;
+    }
+    .pot {
+        top: 222px;
+    }
+    .deck {
+        top: 166px;
+    }
+    .hidden {
+        top: 158px;
+    }
+    .discards {
+        top: 162px;
+        left: 402px;
+    }
+}
+@media only screen and (max-width: 500px) {
+    body {
+        background-position-y: -128px;
+    }
+    .players {
+        top: 19vh;
+    }
+    .pot {
+        top: 53%;
+        left: 60px;
+    }
+    .deck {
+        top: 45%;
+        left: 143px;
+    }
+    .hidden {
+        top: 42%;
+        left: 262px;
+    }
+    .discards {
+        top: 50%;
+        left: 244px;
+    }
+}

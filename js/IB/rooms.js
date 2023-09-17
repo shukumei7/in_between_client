@@ -55,7 +55,7 @@ function RoomNavigation({room, enterRoom, leaveRoom}) {
     }
 
     let output = [
-        e('div', { key : 'actions', className : 'login bottom' }, [
+        e('div', { key : 'actions', className : 'login bottom buttons' }, [
             e('a', { key : 'play', className : 'button', onClick : () => {
                 IBC.play('tick');
                 IBC.post(games, joinRoom, (xhr) => {
@@ -155,7 +155,7 @@ function RoomPreview({ room, enterRoom , close}) {
     }}, e(DisplayBox, { content : 'Join Room' , addClass : 'single center'})));
     return [
         e('div', { key : 'blocker' , className : 'blocker'}, ' '),
-        e(FormBox, { key : 'form', inputs : inputs , buttons : buttons, size : 'quarter room' })
+        e(FormBox, { key : 'form', inputs : inputs , buttons : buttons, size : 'quarter' })
     ];
 }
 
@@ -239,7 +239,7 @@ function RoomUI({ enterRoom , close }) {
     }
     return [
         e('div', { key : 'blocker' , className : 'blocker'}, ' '),
-        e(FormBox, { key : 'form', inputs : inputs , buttons : buttons, size : 'quarter room' })
+        e(FormBox, { key : 'form', inputs : inputs , buttons : buttons, size : 'quarter' })
     ];
 }
 
