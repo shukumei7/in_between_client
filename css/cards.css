@@ -50,10 +50,12 @@
         --line-width: 1px;
         --line-tail: 0;
         --line-color: black;
-        background: white;
         color: black;
-        border-radius: 1vh;
-    
+        .back {
+            background-color: white;
+            opacity: 1;
+            border-radius: 1vh;
+        }
         .box__line--top::before, .box__line--top::after, .box__line--bottom::before, .box__line--bottom::after {
             height: 0;
             width: 0;

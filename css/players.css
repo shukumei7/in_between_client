@@ -1,0 +1,32 @@
+.players {
+    position: relative;
+    top: 20vh;
+    display: flex;
+}
+.player {
+    --box-height: 320px;
+    position: relative;
+    margin: 0 10px;
+    height: var(--box-height);
+    flex: 1;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    .content {
+        padding: var(--content-pad);
+        overflow: hidden;
+    }
+}
+/* preserve code for future use
+.player::before {
+    content : " ";
+    background: black;
+    opacity: 0.5;
+    position: absolute;
+    top: -20px;
+    left: 0;
+    right: 0;
+    bottom: -20px;
+    z-index: -1;
+}
+*/

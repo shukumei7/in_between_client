@@ -194,7 +194,7 @@ let IBC = {
             '--message-down'    : 1.11 * IBC.font_size + -3.57 + help,
             '--message-up'      : 1.21 * IBC.font_size + 165.86 + help
         });
-        console.log('Update Font', help);
+        // console.log('Update Font', help);
     }
 }
 

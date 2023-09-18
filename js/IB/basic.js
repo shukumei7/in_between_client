@@ -50,7 +50,8 @@ function BasicUI({user, points, message, activities, showLogs, setShowLogs}) {
 
     if(activities.length) {
         out.push(e('div', { key : 'activities', className : 'info info_activities ' + (showLogs ? '' : 'compress'), style : {
-            bottom             : showLogs ? IBC.log_up : IBC.log_down
+            bottom              : showLogs ? IBC.log_up : IBC.log_down,
+            '--box-opacity'     : showLogs ? 1 : 0.9
         } }, e(DisplayBox, { content : e(Activities, { user : user, activities : activities, scrollBottom : () => {
             if(bottom) scrollBottom();
         }})})));
@@ -185,13 +186,15 @@ function Message({ message , bottom, toggle }) {
     const [ display , setDisplay ] = useState('');
     useEffect(() => {
         // console.log('Update Message', message);
+        const isDown = bottom.includes('down');
         setDisplay(e('div', { key : 'message', className : 'info info_message', style : {
-            bottom : bottom
+            bottom          : bottom,
+            '--box-opacity' : isDown ? 0.9 : 1
         }}, [
             (IBC.showHelp ? e('div', { key : 'note' , className : 'message' }, 'Click to show more activity') : ''),
             e('a', { key : 'message', className : 'body', onClick : toggle}, e(DisplayBox, { content : [
                 e('span', { key : 'text' }, message),
-                e('span', { key : 'arrow' }, e('i', { className : 'arrow up' }, ' '))
+                e('span', { key : 'arrow' }, e('i', { className : 'arrow ' + (isDown ? 'up' : 'down') }, ' '))
             ], addClass : 'single'})),
             
         ]));

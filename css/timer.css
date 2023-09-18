@@ -1,9 +1,9 @@
 .timer {
     position: fixed;
-    top: 50vh;
+    top: 60vh;
     left: 5px;
+    bottom: 5px;
     width: var(--timer-width);
-    height: 49vh;
     border: 1px solid white;
     border-radius: 1vw;
     overflow: hidden;

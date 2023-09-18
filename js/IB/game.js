@@ -1,6 +1,7 @@
 import IBC from '../ib.js';
 import Maho from '../maho.js';
 import { Card } from './cards.js';
+import DisplayBox from './box.js';
 
 const e = React.createElement;
 const useState = React.useState;
@@ -68,7 +69,7 @@ function Discards({cards, show}) {
     ];
 }
 
-function Deck({label, count , cards = []}) {
+export function Deck({label, count , cards = []}) {
     const [ display , setDisplay ] = useState([]);
     useEffect(() => {
         let deck = [];
@@ -89,7 +90,7 @@ function Deck({label, count , cards = []}) {
     return display;
 }
 
-function Discarded({ index , card = 0, style = {}}) {
+export function Discarded({ index , card = 0, style = {}}) {
     const [ display , setDisplay ] = useState('');
     useEffect(() => {
         if(card) {
@@ -103,7 +104,7 @@ function Discarded({ index , card = 0, style = {}}) {
     return display;
 }
 
-function Players({user, players, playing, dealer, current, scores, hands}) {
+export function Players({user, players, playing, dealer, current, scores, hands}) {
     const [ display , setDisplay ] = useState('');
     useEffect(() => {
         let ordered = playing.toReversed();
@@ -131,14 +132,14 @@ function Players({user, players, playing, dealer, current, scores, hands}) {
     return display;;
 }
 
-function Player({name, is_dealer, is_current, score, hand}) {
-    return (e('div', { key : 'player_' + name , className : 'player' }, [
+export function Player({name, is_dealer, is_current, score, hand}) {
+    return (e('div', { key : 'player_' + name , className : 'player' }, e(DisplayBox, { content : [
         e('div', { key : 'name'}, name),
         e('div', { key : 'score'}, score),
         e('div', { key : 'hand'}, hand),
         e('div', { key : 'dealer'}, is_dealer ? 'Last' : ''),
         e('div', { key : 'current'}, is_current ? 'Current' : '')
-    ]));
+    ]})));
 }
 
 export default GameInfo;

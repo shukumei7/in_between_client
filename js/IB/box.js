@@ -4,6 +4,7 @@ const e = React.createElement;
 
 export function DisplayBox({content, addClass = '', css = {}}) {
     return e('div', { key : 'box', className : 'box' , style : css }, [
+        e('div', { key : 'back', className : 'back '}, ' '),
         e('div', { key : 'content', className : 'content ' + addClass}, content),
         e('div', { key : 'top', className : 'box__line box__line--top'}),
         e('div', { key : 'left', className : 'box__line box__line--left'}),

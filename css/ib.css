@@ -3,6 +3,7 @@
 @import "cards.css";
 @import "deck.css";
 @import "options.css";
+@import "players.css";
 @import "suits.css";
 @import "timer.css";
 
@@ -11,7 +12,9 @@
     --black-suit    : #444444;
     --box-height: 200px;
     --box-width: 400px;
-    --line-color: rgba(255,223,0,1);
+    --box-opacity: 0.9;
+    --text-color: rgba(255,223,0,1);
+    --line-color: var(--sand-color);
     --single-height: 6vh;
     --log-transition: 1s;
     --card-transition: 2s;
@@ -48,6 +51,7 @@ body {
     background-blend-mode: color-dodge;
     font-family: Verdana;
     font-size: var(--font-size);
+    color: var(--text-color);
 }
 .blocker {
     position: fixed;
@@ -362,30 +366,6 @@ div.login {
     cursor: pointer;
     z-index: 2;
 }
-.players {
-    position: relative;
-    top: 34vh;
-    display: flex;
-}
-.player {
-    position: relative;
-    flex: 1;
-    color: white;
-    font-weight: bold;
-    text-align: center;
-}
-.player::before {
-    content : " ";
-    background: black;
-    opacity: 0.5;
-    position: absolute;
-    top: -20px;
-    left: 0;
-    right: 0;
-    bottom: -20px;
-    z-index: -1;
-}
-
 .roomlist {
     --box-width: 50vw;
     --box-height: 70vh;
@@ -418,6 +398,7 @@ div.login {
 .modal {
     --box-height: 90vh;
     --box-width: 90vw;
+    --box-opacity: 1;
     z-index: 7;
     position: fixed;
     top: 50%;

@@ -2,7 +2,7 @@
 
 .arrow {
     position: relative;
-    border: solid var(--line-color);
+    border: solid var(--text-color);
     border-width: 0 3px 3px 0;
     display: inline-block;
     padding: 6px;
@@ -15,7 +15,7 @@
         -webkit-transform: rotate(135deg);
     }
     &.up {
-        top: 5px;
+        top: 3px;
         transform: rotate(-135deg);
         -webkit-transform: rotate(-135deg);
     }
