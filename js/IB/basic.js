@@ -189,7 +189,11 @@ function Message({ message , bottom, toggle }) {
             bottom : bottom
         }}, [
             (IBC.showHelp ? e('div', { key : 'note' , className : 'message' }, 'Click to show more activity') : ''),
-            e('a', { key : 'message', className : 'body', onClick : toggle}, e(DisplayBox, { content : message, addClass : 'single'}))
+            e('a', { key : 'message', className : 'body', onClick : toggle}, e(DisplayBox, { content : [
+                e('span', { key : 'text' }, message),
+                e('span', { key : 'arrow' }, e('i', { className : 'arrow up' }, ' '))
+            ], addClass : 'single'})),
+            
         ]));
     }, [message, bottom, IBC.showHelp]);
     return display;

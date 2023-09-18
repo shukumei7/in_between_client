@@ -16,7 +16,7 @@ export function Timer({deadline, requestUpdate}) {
         if(IBC.graphics.animations) {
             setTimeout(() => {
                 $('.sand').css('transition', 'top 1s linear');
-            }, 200);
+            }, 1200);
         }
         IBC.play('bell');
     }, []);

@@ -106,6 +106,7 @@ function UserUI({user, logout}) {
             if(!confirm('Are you sure you want to log out?')) {
                 return;
             }
+            IBC.clearAlert();
             Cookie.set(IBC.cookie_id, 0);
             Cookie.set(IBC.cookie_token, '');
             logout();

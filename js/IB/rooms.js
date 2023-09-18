@@ -22,6 +22,7 @@ function RoomNavigation({room, enterRoom, leaveRoom}) {
     }
 
     const joinRoom = (res) => {
+        IBC.clearAlert();
         enterRoom({
             id      : res.room_id,
             name    : res.room_name
@@ -41,6 +42,7 @@ function RoomNavigation({room, enterRoom, leaveRoom}) {
             }
             if(res.rooms.length) {
                 setRooms(res.rooms);
+                IBC.alert = setTimeout(getRoomList, 5000);
             }
             if(!showButtons) {
                 setShowButtons(true);

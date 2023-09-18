@@ -143,6 +143,10 @@ main, #logo, .info_user_name {
         text-align: right;
         margin-right: var(--line-width);
     }
+    .content span:last-child {
+        position: absolute;
+        right: calc(2 * var(--line-width));
+    }
 }
 .info-container {
     width: 0;
