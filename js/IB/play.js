@@ -76,12 +76,7 @@ function PlayerAction({turn, max_bet, play, pass}) {
                     pass();
                 }}, e(DisplayBox, { content : [
                     e('span', { key : 'text' }, 'Pass  '),
-                    e('b', { key : 1, className : '', style : {
-                        color: 'red',
-                        fontSize: '20pt',
-                        float: 'right',
-                        marginLeft : '5px'
-                    }}, 'X')
+                    e('b', { key : 1, className : 'closeX'}, 'X')
                 ], addClass : 'single center'}))
             ])
         ]));

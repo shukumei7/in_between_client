@@ -64,7 +64,25 @@
     }
 }
 .discards {
+    --close-size: 30px;
+    --close-top : calc(var(--discard-top) - var(--close-size));
+    --close-right: 20px;
     pointer-events: auto;
+    .close .message {
+        position: fixed;
+        top: calc(var(--close-top) + 8px);
+        left: auto;
+        right: calc(var(--close-right) + var(--close-size) + 5px);
+    }
+    .closeX {
+        position: fixed;
+        top: var(--close-top);
+        right: var(--close-right);
+        cursor: pointer;
+        margin: 0;
+        float: none;
+        font-size: var(--close-size);
+    }
 }
 .deck,.hidden {
     width: auto;

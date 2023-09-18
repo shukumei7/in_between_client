@@ -452,6 +452,13 @@ div.login {
 .discards {
     transition: top var(--log-transition), left var(--log-transition);
 }
+
+.closeX {
+    color: red;
+    font-size: var(--large-font);
+    float: right;
+    margin-left : 5px;
+}
   
 @media only screen and (max-width: 900px) {
     body {

@@ -48,25 +48,32 @@ function GameInfo({user, game}) {
 }
 
 function Discards({cards, show}) {
+    const [ display , setDisplay ] = useState('');
     // console.log('Update Discards', cards.length);
-    if(!show) {
-        return e(Deck, { key : 'discards', count : cards.length, label : (IBC.showHelp ? 'Click to view Played: ' : 'Discards: '), cards : cards});
-    }
-    if(!$('.open').length) {
+    useEffect(() => {
+        if(!show) {
+            setDisplay(e(Deck, { key : 'discards', count : cards.length, label : (IBC.showHelp ? 'Click to view Played: ' : 'Discards: '), cards : cards}));
+            return;
+        }
         setTimeout(() => {
             const hidden = $('.discards .dealt');
             hidden.removeClass('dealt');
         }, 300);
-    }
-    let out = [];
-    for(let x in cards) {
-        out.push(e(Card, { key : x, number : cards[x]}));
-    }
-    return [
-        e('div', { key : 'blocker', className : 'blocker' }, ' '),
-        e('div', { key : 'open', className : 'open' }, out),
-        IBC.showHelp ? e('div', { key : 'message', className : 'message'}, 'These are discarded when players "Play". Scroll to the side to view more. Click anywhere to close.') : ''
-    ];
+        let out = [];
+        for(let x in cards) {
+            out.push(e(Card, { key : x, number : cards[x]}));
+        }
+        setDisplay([
+            e('div', { key : 'blocker', className : 'blocker' }, ' '),
+            e('div', { key : 'close', className : 'close'}, [
+                e('span', { key : 'help', className : 'message'}, 'Close'),
+                e('span', { key : 'x', className : 'closeX'}, 'X')
+            ]),
+            e('div', { key : 'open', className : 'open' }, out),
+            IBC.showHelp ? e('div', { key : 'message', className : 'message'}, 'These are discarded when players "Play". Scroll to the side to view more. Click anywhere to close.') : ''
+        ]);
+    }, [show, cards]);
+    return display;    
 }
 
 export function Deck({label, count , cards = []}) {
