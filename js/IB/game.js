@@ -8,39 +8,42 @@ const useEffect = React.useEffect;
 
 function GameInfo({user, game}) {
     const [ showDiscards, setShowDiscards ] = useState(false)
-    return [
-        e('div', { key : 'players', className : 'players' }, e(Players, { 
-            user    : user,
-            players : game.players,
-            playing : game.playing,
-            dealer  : game.dealer,
-            current : game.current,
-            scores  : game.scores,
-            hands   : game.hands
-        })),
-        e('div', { key : 'hidden', className : 'hidden' }, e(Deck, { key : 'hidden', count : game.hidden, label : 'Trash: ' })), // e('div', { key : 'hidden', className : 'hidden' }, game.hidden),
-        e('div', { key : 'deck', className : 'deck' }, e(Deck, { key : 'deck', count : game.deck, label : 'Deck: ' })), // e('div', { key : 'deck', className : 'deck' }, game.deck),
-        e('div', { key : 'discards', className : 'discards', onClick : () => {
-            if(!game.discards.length) {
-                if(showDiscards) setShowDiscards(false);
-                return;
-            }
-            IBC.play('tick');
-            if(!showDiscards) {
-                setShowDiscards(true);
-                return;
-            }
-            $('.discards .card').addClass('pass');
-            setTimeout(() => {
-                setShowDiscards(false);
-            }, 1500);
-        }, style : {
-            '--card-thickness'   : '0.1px',
-            '--card-slope'       : '5px',
-            '--card-color'       : 'white'
-        }},  e(Discards, { key : 'discards', cards : game.discards, show : showDiscards})),
-        e('div', { key : 'pot', className : 'pot' }, 'Pot: ' + Maho.number(game.pot))
-    ]
+    const [ display , setDisplay ] = useState('');
+    let out = [];
+    out.push(e('div', { key : 'players', className : 'players' }, e(Players, { 
+        user    : user,
+        players : game.players,
+        playing : game.playing,
+        dealer  : game.dealer,
+        current : game.current,
+        scores  : game.scores,
+        hands   : game.hands
+    })));
+    out.push(e('div', { key : 'hidden', className : 'hidden' }, e(Deck, { key : 'hidden', count : game.hidden, label : 'Trash: ' })));
+    out.push(e('div', { key : 'deck', className : 'deck' }, e(Deck, { key : 'deck', count : game.deck, label : 'Deck: ' })));
+    out.push(e('div', { key : 'discards', className : 'discards', onClick : () => {
+        if(!game.discards.length) {
+            if(showDiscards) setShowDiscards(false);
+            return;
+        }
+        IBC.play('tick');
+        if(!showDiscards) {
+            setShowDiscards(true);
+            return;
+        }
+        $('.discards .card').addClass('pass');
+        setTimeout(() => {
+            setShowDiscards(false);
+        }, 1500);
+    }, style : {
+        '--card-thickness'   : '0.1px',
+        '--card-slope'       : '5px',
+        '--card-color'       : 'white'
+    }},  e(Discards, { key : 'discards', cards : game.discards, show : showDiscards})));
+    useEffect(() => {
+        setDisplay([e('div', { key : 'pot', className : 'pot' }, (IBC.graphics.text ? 'Pot: ' : '') + Maho.number(game.pot))]);
+    }, [game.pot, IBC.graphics.text]);
+    return out.concat(display);
 }
 
 function Discards({cards, show}) {
@@ -69,8 +72,8 @@ function Deck({label, count , cards = []}) {
     const [ display , setDisplay ] = useState([]);
     useEffect(() => {
         let deck = [];
-        deck.push(e('div', { key : 'count', className : 'count'}, label + count));
-        if(!IBC.graphics.decks) {
+        deck.push(e('div', { key : 'count', className : 'count'}, IBC.graphics.text ? label + count : count));
+        if(IBC.graphics.decks <= 0) {
             setDisplay(deck);
             return;
         }
@@ -82,7 +85,7 @@ function Deck({label, count , cards = []}) {
             deck.push(e(Discarded, { key : x, index : x, card : cards[x], style : style}));
         }
         setDisplay(deck);
-    }, [count]);
+    }, [count, IBC.graphics.decks, IBC.graphics.text, label]);
     return display;
 }
 
@@ -101,27 +104,31 @@ function Discarded({ index , card = 0, style = {}}) {
 }
 
 function Players({user, players, playing, dealer, current, scores, hands}) {
-    let ordered = playing.toReversed();
-    let out = [];
-    let found = false;
-    for(let x in ordered) {
-        const id = ordered[x];
-        if(id == user.id) {
-            delete ordered[x];
-            found = true;
-            continue;
+    const [ display , setDisplay ] = useState('');
+    useEffect(() => {
+        let ordered = playing.toReversed();
+        let out = [];
+        let found = false;
+        for(let x in ordered) {
+            const id = ordered[x];
+            if(id == user.id) {
+                delete ordered[x];
+                found = true;
+                continue;
+            }
+            if(found) {
+                out.push(e(Player, { key : 'player_' + id, name : players[id], is_dealer : dealer == id, is_current : current == id, score : scores[id], hand : hands[id]}));
+                delete ordered[x];
+            }
         }
-        if(found) {
+        // console.log('Remaining players', ordered);
+        for(let x in ordered) {
+            const id = ordered[x];
             out.push(e(Player, { key : 'player_' + id, name : players[id], is_dealer : dealer == id, is_current : current == id, score : scores[id], hand : hands[id]}));
-            delete ordered[x];
         }
-    }
-    // console.log('Remaining players', ordered);
-    for(let x in ordered) {
-        const id = ordered[x];
-        out.push(e(Player, { key : 'player_' + id, name : players[id], is_dealer : dealer == id, is_current : current == id, score : scores[id], hand : hands[id]}));
-    }
-    return out  ;
+        setDisplay(out);
+    }, [current]);
+    return display;;
 }
 
 function Player({name, is_dealer, is_current, score, hand}) {

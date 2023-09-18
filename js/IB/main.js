@@ -246,7 +246,7 @@ function IBCMain() {
     const time = last.time;
     const ms = (new Date(time)).getTime();
     const seconds = ms / 1000;
-    out.push(e(Timer, { key : 'timer', deadline : seconds + IBC.timeout }));
+    out.push(e(Timer, { key : 'timer', deadline : seconds + IBC.timeout, requestUpdate : checkGameStatus }));
 
     return out;
 }

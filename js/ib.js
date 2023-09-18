@@ -30,7 +30,9 @@ let IBC = {
         alert   : 'alert',
         anim    : 'animation',
         decks   : 'decks',
-        bg      : 'background'
+        bg      : 'background',
+        help    : 'help',
+        text    : 'text'
     },
     ajax            : (action, type, data, success, error) => {
         let options = {
@@ -151,14 +153,16 @@ let IBC = {
     graphics    : {
         decks           : true,
         animations      : true,
+        text            : true,
         bg              : true,
         log             : '1s',
         card            : '1s',
         setAnimations   : (val) => {
             if(typeof val != 'undefined') {
-                IBC.graphics.animations = val = val ? 1 : 0;
+                IBC.graphics.animations = val = val > 0 ? 1 : 0;
                 Cookie.set(IBC.cookies.anim, val, IBC.cookie_days);
             }
+            // console.log('Set Animations', IBC.graphics.animations);
             $(':root').css({
                 '--log-transition'  : IBC.graphics.animations ? IBC.graphics.log : 0,
                 '--card-transition' : IBC.graphics.animations ? IBC.graphics.card : 0
@@ -181,11 +185,16 @@ let IBC = {
         if(val) {
             IBC.font_size = val;
         }
+        let help = 0;
+        if(!IBC.showHelp) {
+            help = -20;
+        }
         $(':root').css({
             '--font-size'       : IBC.font_size,
-            '--message-down'    : 1.11 * IBC.font_size + -3.57,
-            '--message-up'      : 1.21 * IBC.font_size + 165.86
+            '--message-down'    : 1.11 * IBC.font_size + -3.57 + help,
+            '--message-up'      : 1.21 * IBC.font_size + 165.86 + help
         });
+        console.log('Update Font', help);
     }
 }
 
@@ -204,16 +213,18 @@ $(() => {
         IBC.options = ReactDOM.createRoot(document.querySelector('#options'));
         IBC.options.render(React.createElement(Options));
         // load cookie options
-        IBC.updateFont(Cookie.get(IBC.cookies.font, IBC.font_size));
         IBC.volume.master = Cookie.get(IBC.cookies.master, IBC.volume.master);
         IBC.volume.se = Cookie.get(IBC.cookies.se, IBC.volume.se);
         IBC.volume.bgm = Cookie.get(IBC.cookies.bgm, IBC.volume.bgm);
         IBC.volume.tick = Cookie.get(IBC.cookies.tick, IBC.volume.tick) > 0 ? 1 : 0;
         IBC.volume.bell = Cookie.get(IBC.cookies.alert, IBC.volume.bell) > 0 ? 1 : 0;
-        Cookie.get(IBC.cookies.anim, IBC.graphics.animations);
+        IBC.graphics.animations = Cookie.get(IBC.cookies.anim, IBC.graphics.animations) > 0;
         IBC.graphics.setAnimations();
-        IBC.graphics.decks = Cookie.get(IBC.cookies.decks, IBC.graphics.decks);
-        IBC.graphics.bg = Cookie.get(IBC.cookies.bg, IBC.graphics.bg);
+        IBC.graphics.decks = Cookie.get(IBC.cookies.decks, IBC.graphics.decks) > 0;
+        IBC.graphics.bg = Cookie.get(IBC.cookies.bg, IBC.graphics.bg) > 0;
+        IBC.graphics.text = Cookie.get(IBC.cookies.text, IBC.graphics.text) > 0;
+        IBC.showHelp = Cookie.get(IBC.cookies.help, IBC.showHelp) > 0;
+        IBC.updateFont(Cookie.get(IBC.cookies.font, IBC.font_size));
     }, (xhr) => {
         const message = 'Could not connect to server. Try again by refreshing this page later';
         console.log(message);

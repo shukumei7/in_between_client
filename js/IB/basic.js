@@ -119,13 +119,18 @@ function Activities({user, activities, scrollBottom}) {
         }
         const previous = IBC.previous;
         let last = previous.length ? previous.slice(-1).pop() : null;
-        var o = [];
+        let o = [];
+        let x = 0;
         for(let x in activities) {
             const activity = activities[x];
             if(last && last.id >= activity.id) {
                 continue; // skip done
             }
-            if(last) getOneAct(activity);
+            if(last) {
+                setTimeout(() => {
+                    getOneAct(activity);
+                }, x++ * 100);
+            }
             o.push(e(Activity, { key : x, user : user, activity : activity}));
         }
         IBC.previous = activities;
@@ -186,7 +191,7 @@ function Message({ message , bottom, toggle }) {
             (IBC.showHelp ? e('div', { key : 'note' , className : 'message' }, 'Click to show more activity') : ''),
             e('a', { key : 'message', className : 'body', onClick : toggle}, e(DisplayBox, { content : message, addClass : 'single'}))
         ]));
-    }, [message, bottom]);
+    }, [message, bottom, IBC.showHelp]);
     return display;
     
 }

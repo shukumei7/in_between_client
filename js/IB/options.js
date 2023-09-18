@@ -8,7 +8,6 @@ const f = React.useEffect;
 
 export function Options() {
     const [ showOptions , setShowOptions ] = s(false);
-
     const font_id = 'font';
     const master_id = 'master';
     const se_id = 'se';
@@ -18,6 +17,8 @@ export function Options() {
     const alert_id = 'alert-bell';
     const deck_id = 'deck';
     const bg_id = 'bg';
+    const help_id = 'help';
+    const text_id = 'text';
     f(() => {
         $('#logo').click(() => {
             setShowOptions(true);
@@ -124,8 +125,28 @@ export function Options() {
         key         : 'decks-check',
         id          : deck_id,
         label       : 'Show Decks',
-        source      : IBC.graphics.animations,
+        source      : IBC.graphics.decks,
         callback    : (val) => Cookie.set(IBC.cookies.decks, IBC.graphics.decks = val ? 1 : 0)
+    }));
+    content.push(e(Checkbox, {
+        key         : 'help-check',
+        id          : help_id,
+        label       : 'Show Help Text',
+        source      : IBC.showHelp,
+        callback    : (val) => {
+            Cookie.set(IBC.cookies.help, IBC.showHelp = val ? 1 : 0);
+            IBC.updateFont();
+        }
+    }));
+    content.push(e(Checkbox, {
+        key         : 'text-check',
+        id          : text_id,
+        label       : 'Show All Text',
+        source      : IBC.graphics.text,
+        callback    : (val) => {
+            Cookie.set(IBC.cookies.text, IBC.graphics.text = val ? 1 : 0);
+            IBC.updateFont();
+        }
     }));
     content.push(e('div', { key : 'buttons', className : 'buttons' }, e(Button, { display : 'Close', click : () => {
         setShowOptions(false);
