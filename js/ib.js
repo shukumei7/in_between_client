@@ -100,6 +100,7 @@ let IBC = {
             for(let x = 0; x < audio.length ; x++) {
                 const bgm = audio[x];
                 bgm.audio.volume = IBC.volume.get('bgm', bgm.volume);
+                bgm.audio.play();
             }
         }
     },

@@ -16,8 +16,9 @@ export function News({ close = null}) {
             e('li', {key : 2}, 'Maximum Room Pot: ' + Maho.number(IBC.max_pot)),
             e('li', {key : 3}, 'Restricted Bet: ' + Maho.number(IBC.restrict_bet)),
             e('li', {key : 4}, 'Maximum Players: ' + Maho.number(IBC.max_players)),
-            e('li', {key : 6}, 'Kick Timeout: ' + Maho.number(IBC.timeout) + ' seconds'),
-            e('li', {key : 7}, 'Timeout Warning: ' + Maho.number(IBC.alertDiff) + ' seconds'),
+            e('li', {key : 5}, 'Timeout Warning: ' + Maho.number(IBC.alertDiff) + ' seconds'),
+            e('li', {key : 6}, 'Pass Timeout: ' + Maho.number(IBC.timeout) + ' seconds'),
+            e('li', {key : 7}, 'Auto-Kick: After ' + Maho.number(IBC.kick) + ' timeouts'), 
         ]),
     ]));
     if(close) {

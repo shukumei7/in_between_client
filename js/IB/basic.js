@@ -152,14 +152,17 @@ function Activity({user, activity}) {
                 case 'join':
                     return message + ' joined the room';
                 case 'leave':
-                case 'kick':
                     return message + ' left the room';
+                case 'kick':
+                    return message + ' was kicked out of the room';
                 case 'pot':
                     return message + ' added ' + Maho.number(Math.abs(ev.bet)) + ' to the pot';
                 case 'deal':
                     return message + ' got a card';
                 case 'pass':
                     return message + ' passed';
+                case 'timeout':
+                    return message + ' ran out of time';
                 case 'play':
                     return message + ' played and ' + (ev.bet > 0 ? 'won' : 'lost') + ' ' + Maho.number(Math.abs(ev.bet));
                 case 'shuffle':

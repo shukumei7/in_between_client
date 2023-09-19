@@ -40,9 +40,9 @@ function RoomNavigation({room, enterRoom, leaveRoom}) {
                 joinRoom(res);
                 return;
             }
+            IBC.alert = setTimeout(getRoomList, 5000);
             if(res.rooms.length) {
                 setRooms(res.rooms);
-                IBC.alert = setTimeout(getRoomList, 5000);
             }
             if(!showButtons) {
                 setShowButtons(true);

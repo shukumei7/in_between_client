@@ -20,6 +20,7 @@
     pointer-events: none;
     white-space: nowrap;
     height: var(--box-height);
+    width: 100%;
     z-index: 4;
     >.card {
         position: relative;
@@ -32,7 +33,7 @@
         transition: margin-left var(--card-transition);
         pointer-events: auto;
         &.dealt, &.pass {
-            margin-left: 150vw !important;
+            margin-left: 300% !important;
         }
         .content {
             padding: 10px 0 0 10px;

@@ -4,7 +4,6 @@ import BasicUI from './basic.js';
 import RoomNavigation from './rooms.js';
 import CardHand from './cards.js';
 import PlayerAction from './play.js';
-import { DisplayBox, DialogBox } from './box.js';
 import GameInfo from './game.js';
 import Timer from './timer.js';
 import News from './news.js';
@@ -22,7 +21,8 @@ function IBCMain() {
     const [ message , setMessage ] = useState(0);
     const [ user , setUser ] = useState({
         id      : 0,
-        name    : ''
+        name    : '',
+        secure  : false
     });
     const [ room , setRoom ] = useState({
         id          : 0,
@@ -72,6 +72,10 @@ function IBCMain() {
 
     out.push(e(User, { key : 'user', user : user, updateDetails : (user, message, points) => {
         setUser(user);
+        if(!user.id) { // logged out
+            setRoom(user);
+            setGame(emptyGame);
+        }
         setMessage(message);
         setPoints(points);
     }, activateUI : activateUI}));
@@ -88,6 +92,10 @@ function IBCMain() {
         activities  : game.activities,
         showLogs    : showLogs,
         setShowLogs : (v) => {
+            if(!room.id) {
+                setShowLogs(false);
+                return;
+            }
             setShowLogs(v);
         }
     }));
@@ -101,7 +109,13 @@ function IBCMain() {
     }
 
     const checkGameStatus = () => {
-        if(!user.id || !room.id) {
+        if(!user.id) {
+            setMessage('You got disconnected');
+            setGame(emptyGame);
+            return;
+        }
+        if(!room.id) {
+            setMessage('You got kicked out of the room');
             setGame(emptyGame);
             return;
         }
