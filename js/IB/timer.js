@@ -7,8 +7,9 @@ export function Timer({deadline, requestUpdate}) {
     const [ time , setTime ] = React.useState(0);
 
     React.useEffect(() => { // initialize timer
-        const diff = deadline - (Date.now() / 1000);
-        // console.log('Start Timer', deadline, diff);
+        const now = Math.round(Date.now() / 1000);
+        const diff = deadline - now;
+        console.log('Start Timer', deadline, now, diff);
         setTime(Math.round(IBC.timeout - diff));
         if(diff <= 0) {
             return;
