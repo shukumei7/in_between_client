@@ -166,7 +166,7 @@ main, #logo, .info_user_name {
 }
 .info_activities {
     --box-height: var(--log-height);
-    bottom: var(--log-up);
+    bottom: var(--log-down);
     .content div {
         padding-top: 20px;
     }

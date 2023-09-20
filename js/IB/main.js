@@ -145,7 +145,9 @@ function IBCMain() {
         }, leaveRoom : () => {
             IBC.play('tick');
             setTimeout(() => {
+                setShowLogs(false);
                 if(!confirm('Are you sure you want to leave this room?')) {
+                    setShowLogs(game.current != user.id);
                     return;
                 }
                 IBC.clearAlert();

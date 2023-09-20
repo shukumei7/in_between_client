@@ -9,9 +9,6 @@ let IBC = {
     cookie_token    : 'login_token',
     cookie_days     : 30,
     bet_id          : 'play-bet',
-    log_up          : 'var(--log-up)',
-    log_down        : 'var(--log-down)',
-    log_height      : 'var(--log-height)',
     font_size       : 14,
     card_fs         : 20,
     refresh_rate    : 5000,
@@ -196,6 +193,12 @@ let IBC = {
             '--message-up'      : 1.21 * IBC.font_size + 165.86 + help
         });
         // console.log('Update Font', help);
+    },
+    now         : () => {
+        const date = new Date();
+        const tztime = date.toLocaleString('en-US', { timezone : IBC.server_timezone});
+        // console.log('Get Now', date, tztime, IBC.server_timezone);
+        return Math.round((new Date(tztime).getTime()) / 1000);
     }
 }
 
