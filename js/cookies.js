@@ -80,19 +80,19 @@ export const CookieConsent = {
             cursor          : 'pointer',
             marginTop       : '-10px'
         });
-        closer.setHTML('X');
+        closer.innerHTML = 'X';
         const closeNotice = () => {
             container.remove();
             blocker.remove();
         }
         closer.addEventListener('click', closeNotice);
         let title = document.createElement('h3');
-        title.setHTML('Cookie Consent');
+        title.innerHTML = 'Cookie Consent';
         let text = document.createElement('p');
         Object.assign(text.style, {
             overflowWrap    : 'break-word'
         });
-        text.setHTML('This website uses cookies or similar technologies, to enhance your browsing experience and provide personalized recommendations. By continuing to use our website, you agree to our  <a style="color:#115cfa;" href="/privacy.html">Privacy Policy</a>');
+        text.innerHTML = 'This website uses cookies or similar technologies, to enhance your browsing experience and provide personalized recommendations. By continuing to use our website, you agree to our  <a style="color:#115cfa;" href="/privacy.html">Privacy Policy</a>';
         let accept = document.createElement('button');
         Object.assign(accept.style, {
             background      : '#115cfa',
@@ -102,7 +102,7 @@ export const CookieConsent = {
             width           : '100%',
             cursor          : 'pointer'
         });
-        accept.setHTML('Accept All Cookies');
+        accept.innerHTML = 'Accept All Cookies';
         accept.addEventListener('click', () => {
             CookieConsent.accept();
             closeNotice();
