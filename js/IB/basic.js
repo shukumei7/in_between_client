@@ -52,9 +52,13 @@ function BasicUI({user, points, message, activities, showLogs, setShowLogs}) {
         out.push(e('div', { key : 'activities', className : 'info info_activities ' + (showLogs ? '' : 'compress'), style : {
             bottom              : showLogs ? IBC.log_up : IBC.log_down,
             '--box-opacity'     : showLogs ? 1 : 0.9
-        } }, e(DisplayBox, { content : e(Activities, { user : user, activities : activities, scrollBottom : () => {
-            if(bottom) scrollBottom();
-        }})})));
+        } }, e(DisplayBox, { content : e(Activities, { 
+            user : user, 
+            activities : activities, 
+            scrollBottom : () => {
+                if(bottom) scrollBottom();
+            }
+        })})));
         // console.log('Show Acts', activities.length, acts);
         if(showLogs && !bottom) {
             // console.log('Show Bottom Button');
@@ -68,17 +72,22 @@ function BasicUI({user, points, message, activities, showLogs, setShowLogs}) {
         setShowLogs(false);
     }
 
-    out.push(e(Message, { key : 'message', message : message , bottom : showLogs ? 'var(--message-up)' : 'var(--message-down)', toggle : () => {
-        IBC.play('tick');
-        if(!activities.length) {
-            if(showLogs) setShowLogs(false);
-            return;
+    out.push(e(Message, { 
+        key     : 'message', 
+        message : message , 
+        bottom  : showLogs ? 'var(--message-up)' : 'var(--message-down)',
+        toggle  : () => {
+            IBC.play('tick');
+            if(!activities.length) {
+                if(showLogs) setShowLogs(false);
+                return;
+            }
+            setShowLogs(!showLogs);
+            if(showLogs) return;
+            scrollBottom();
+            setBottom(true);
         }
-        setShowLogs(!showLogs);
-        if(showLogs) return;
-        scrollBottom();
-        setBottom(true);
-    }}));
+    }));
 
     return (out);
 }
@@ -121,7 +130,7 @@ function Activities({user, activities, scrollBottom}) {
         const previous = IBC.previous;
         let last = previous.length ? previous.slice(-1).pop() : null;
         let o = [];
-        let x = 0;
+        let count = 0;
         for(let x in activities) {
             const activity = activities[x];
             if(last && last.id >= activity.id) {
@@ -130,7 +139,7 @@ function Activities({user, activities, scrollBottom}) {
             if(last) {
                 setTimeout(() => {
                     getOneAct(activity);
-                }, x++ * 100);
+                }, count++ * 500);
             }
             o.push(e(Activity, { key : x, user : user, activity : activity}));
         }

@@ -33,6 +33,7 @@ function GameInfo({user, game}) {
             return;
         }
         $('.discards .card').addClass('pass');
+        $('.open').css('overflow-x', 'hidden');
         setTimeout(() => {
             setShowDiscards(false);
         }, 1500);
@@ -58,6 +59,9 @@ function Discards({cards, show}) {
         setTimeout(() => {
             const hidden = $('.discards .dealt');
             hidden.removeClass('dealt');
+            setTimeout(() => {
+                $('.open').css('overflow-x', 'auto');
+            }, 1000);
         }, 300);
         let out = [];
         for(let x in cards) {
