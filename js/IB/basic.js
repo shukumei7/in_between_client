@@ -7,10 +7,10 @@ const useState = React.useState;
 const useEffect = React.useEffect;
 
 function BasicUI({user, points, message, activities, showLogs, setShowLogs}) {
+    const [ display , setDisplay ] = useState([]);
     const [ bottom , setBottom ] = useState(true); 
     const [ div , setDiv ] = useState(null);
 
-    let out = [];
     const checkBottom = () => {
         const $div = div ? div : $('.info_activities .content');
         if(!$div.length) {
@@ -26,6 +26,7 @@ function BasicUI({user, points, message, activities, showLogs, setShowLogs}) {
             setBottom(true);
         }
     }
+
     const scrollBottom = () => {
         setTimeout(() => {
             const $div = div ? div : $('.info_activities .content');
@@ -35,61 +36,76 @@ function BasicUI({user, points, message, activities, showLogs, setShowLogs}) {
             // console.log('Scrolled', target);
         }, IBC.tickSpeed);
     }
-    if(div) {
-        if(!div.is(':visible')) {
-            div.remove();
-            setDiv(null);
-        }
-        div.scroll((ev) => {
-            clearTimeout(IBC.tick);
-            const bot = bottom;
-            IBC.tick = setTimeout(checkBottom, 1000);
-        });
-    }
-    out.push(e(Points, { key : 'points', points : points}));
 
-    if(activities.length) {
-        out.push(e('div', { key : 'activities', className : 'info info_activities ' + (showLogs ? '' : 'compress'), style : {
-            bottom              : showLogs ? IBC.log_up : IBC.log_down,
-            '--box-opacity'     : showLogs ? 1 : 0.9
-        } }, e(DisplayBox, { content : e(Activities, { 
-            user : user, 
-            activities : activities, 
-            scrollBottom : () => {
-                if(bottom) scrollBottom();
+    const getElements = () => {
+        let out = [];
+
+        out.push(e(Points, { key : 'points', points : points}));
+
+        if(activities.length) {
+            out.push(e('div', { key : 'activities', className : 'info info_activities ' + (showLogs ? '' : 'compress'), style : {
+                bottom              : showLogs ? IBC.log_up : IBC.log_down,
+                '--box-opacity'     : showLogs ? 1 : 0.9
+            } }, e(DisplayBox, { content : e(Activities, { 
+                user : user, 
+                activities : activities, 
+                scrollBottom : () => {
+                    if(bottom) scrollBottom();
+                }
+            })})));
+            // console.log('Show Acts', activities.length, acts);
+            if(showLogs && !bottom) {
+                // console.log('Show Bottom Button');
+                out.push(e('a', { key : 'bottom', className : 'button short bottom', onClick : () => {
+                    IBC.play('tick');
+                    scrollBottom();
+                    $('.button.bottom').hide();
+                }}, e(DisplayBox, { content : e('i', { className : 'arrow down'}), addClass : 'single center'})));
             }
-        })})));
-        // console.log('Show Acts', activities.length, acts);
-        if(showLogs && !bottom) {
-            // console.log('Show Bottom Button');
-            out.push(e('a', { key : 'bottom', className : 'button short bottom', onClick : () => {
+        } else if(showLogs) {
+            setShowLogs(false);
+        }
+
+        out.push(e(Message, { 
+            key     : 'message', 
+            message : message , 
+            bottom  : showLogs ? 'var(--message-up)' : 'var(--message-down)',
+            toggle  : () => {
                 IBC.play('tick');
+                if(!activities.length) {
+                    if(showLogs) setShowLogs(false);
+                    return;
+                }
+                setShowLogs(!showLogs);
+                if(showLogs) return;
                 scrollBottom();
-                $('.button.bottom').hide();
-            }}, e(DisplayBox, { content : e('i', { className : 'arrow down'}), addClass : 'single center'})));
-        }
-    } else if(showLogs) {
-        setShowLogs(false);
+                setBottom(true);
+            }
+        }));
+
+        return (out);
     }
 
-    out.push(e(Message, { 
-        key     : 'message', 
-        message : message , 
-        bottom  : showLogs ? 'var(--message-up)' : 'var(--message-down)',
-        toggle  : () => {
-            IBC.play('tick');
-            if(!activities.length) {
-                if(showLogs) setShowLogs(false);
-                return;
+    useEffect(() => {
+        if(div) {
+            if(!div.is(':visible')) {
+                div.remove();
+                setDiv(null);
             }
-            setShowLogs(!showLogs);
-            if(showLogs) return;
-            scrollBottom();
-            setBottom(true);
+            div.scroll((ev) => {
+                clearTimeout(IBC.tick);
+                const bot = bottom;
+                IBC.tick = setTimeout(checkBottom, 1000);
+            });
         }
-    }));
+    }, [div]);
 
-    return (out);
+    useEffect(() => {
+        setDisplay(getElements());
+    }, [showLogs, points, message, activities.length, bottom]);
+
+    return display;
+    
 }
 
 function Activities({user, activities, scrollBottom}) {

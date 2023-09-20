@@ -8,18 +8,11 @@ const useEffect = React.useEffect;
 
 function RoomNavigation({room, enterRoom, leaveRoom}) {
     const [ display , setDisplay] = useState('');
-    useEffect(() => {
-        // console.log('Update in Room', room);
-        setDisplay(e('div', { key : 'room name', className : 'info room_name', onClick : leaveRoom }, e(DisplayBox, { content : room.name , addClass : 'single right' })));
-    }, [room.id]);
-    
     const [ showButtons , setShowButtons ] = useState(false);
     const [ rooms , setRooms ] = useState([]);
     const [ showCreate , setShowCreate ] = useState(false);
 
-    if(room.id) {
-        return display; 
-    }
+    const games = 'games';
 
     const joinRoom = (res) => {
         IBC.clearAlert();
@@ -27,15 +20,14 @@ function RoomNavigation({room, enterRoom, leaveRoom}) {
             id      : res.room_id,
             name    : res.room_name
         }, 'You have entered a room');
-    }
-
-    const games = 'games';
+    } 
 
     const getRoomList = () => {
         IBC.get(games, (res) => {   // check if you are inside a room
             if(room.id) { 
                 return; // entered room and no need for updates // or lost user access
             }
+            // console.log('Update Room List', res);
             if(res.room_id) {
                 joinRoom(res);
                 return;
@@ -51,8 +43,19 @@ function RoomNavigation({room, enterRoom, leaveRoom}) {
         });
     }
 
+    useEffect(() => {
+        // console.log('Update in Room', room);
+        if(!showButtons) {
+            getRoomList();
+        }
+        setDisplay(e('div', { key : 'room name', className : 'info room_name', onClick : leaveRoom }, e(DisplayBox, { content : room.name , addClass : 'single right' })));
+    }, [room.id]);
+    
+    if(room.id) {
+        return display; 
+    }
+
     if(!showButtons) {
-        getRoomList();
         return '';
     }
 
