@@ -6,7 +6,8 @@ import CardHand from './cards.js';
 import PlayerAction from './play.js';
 import GameInfo from './game.js';
 import Timer from './timer.js';
-import News from './news.js';
+import Welcome from './welcome.js';
+import Options from './options.js';
 
 const e = React.createElement;
 const useState = React.useState;
@@ -111,7 +112,7 @@ function IBCMain() {
             }
             setMessage(message);
             setPoints(points);
-        }, activateUI : activateUI}));
+        }}));
 
         if(!user.id) {
             return out;
@@ -145,7 +146,9 @@ function IBCMain() {
         }, leaveRoom : () => {
             IBC.play('tick');
             setTimeout(() => {
+                setShowLogs(false);
                 if(!confirm('Are you sure you want to leave this room?')) {
+                    setShowLogs(game.current != user.id);
                     return;
                 }
                 IBC.clearAlert();
@@ -272,7 +275,7 @@ function IBCMain() {
     }, [game.current]);
 
     if(!interaction) {
-        return e(News, { close : activateUI });
+        return e(Welcome, { close : activateUI });
     }
 
     return display;

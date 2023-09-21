@@ -43,16 +43,15 @@ function BasicUI({user, points, message, activities, showLogs, setShowLogs}) {
         out.push(e(Points, { key : 'points', points : points}));
 
         if(activities.length) {
-            out.push(e('div', { key : 'activities', className : 'info info_activities ' + (showLogs ? '' : 'compress'), style : {
-                bottom              : showLogs ? IBC.log_up : IBC.log_down,
-                '--box-opacity'     : showLogs ? 1 : 0.9
-            } }, e(DisplayBox, { content : e(Activities, { 
-                user : user, 
-                activities : activities, 
+            out.push(e(Activities, { 
+                key          : 'activities',
+                user         : user, 
+                activities   : activities, 
+                bottom       : showLogs ? 'var(--log-up)' : 'var(--log-down)',
                 scrollBottom : () => {
                     if(bottom) scrollBottom();
                 }
-            })})));
+            }));
             // console.log('Show Acts', activities.length, acts);
             if(showLogs && !bottom) {
                 // console.log('Show Bottom Button');
@@ -108,7 +107,8 @@ function BasicUI({user, points, message, activities, showLogs, setShowLogs}) {
     
 }
 
-function Activities({user, activities, scrollBottom}) {
+function Activities({user, activities, bottom, scrollBottom}) {
+    const [ box , setBox ] = useState('');
     const [ display , setDisplay ] = useState([]);
     useEffect(() => {
         // console.log('Update Activities', activities.length);
@@ -164,7 +164,14 @@ function Activities({user, activities, scrollBottom}) {
         // console.log('Append activities', o.length);
         setDisplay(display.concat(o));
     }, [activities.length]);
-    return display;
+    useEffect(() => {
+        const isDown = bottom.includes('down');
+        setBox(e('div', { key : 'activities', className : 'info info_activities ' + (!isDown ? '' : 'compress'), style : {
+            bottom : bottom,
+            '--box-opacity'     : !isDown ? 1 : 0.9
+        }}, e(DisplayBox, { content : display })));
+    }, [bottom]);
+    return box;
 }
 
 function Activity({user, activity}) {
