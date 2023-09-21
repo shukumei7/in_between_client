@@ -1,15 +1,14 @@
 import IBCMain from './IB/main.js';
-import Options from './IB/options.js';
 import { Cookie } from './cookies.js';
 import { ErrorBox } from './IB/box.js';
 
 let IBC = {
-    api             : 'http://localhost/api/',
+    api             : 'http://localhost',
     cookie_id       : 'login_user',
     cookie_token    : 'login_token',
     cookie_days     : 30,
     bet_id          : 'play-bet',
-    font_size       : 14,
+    font_size       : 16,
     card_fs         : 20,
     refresh_rate    : 5000,
     previous        : [],
@@ -33,7 +32,7 @@ let IBC = {
     },
     ajax            : (action, type, data, success, error) => {
         let options = {
-            url     : IBC.api + action,
+            url     : IBC.api + '/api/' + action,
             type    : type
         };
         if(IBC.headers) {
@@ -214,8 +213,6 @@ $(() => {
         console.log('Server is UP');
         IBC.root = ReactDOM.createRoot(document.querySelector('main'));
         IBC.root.render(React.createElement(IBCMain));
-        IBC.options = ReactDOM.createRoot(document.querySelector('#options'));
-        IBC.options.render(React.createElement(Options));
         // load cookie options
         IBC.volume.master = Cookie.get(IBC.cookies.master, IBC.volume.master);
         IBC.volume.se = Cookie.get(IBC.cookies.se, IBC.volume.se);

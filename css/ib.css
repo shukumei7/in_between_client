@@ -409,6 +409,8 @@ div.login {
     pointer-events: auto;
     >.box >.content {
         padding: 20px;
+        top: 1px;
+        height: 93.5%;
     }
     &.half {
         --box-height: auto;

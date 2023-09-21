@@ -5,10 +5,18 @@
         <link href="/favicon.ico" type="image/x-icon" rel="icon">
         <title>Play In Between</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <!-- Development -->
         <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
         <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-        <script type="module" src="js/ib.js"></script>
-        <link rel="stylesheet" href="css/ib.css">
+        <script type="module" src="./js/ib.js"></script>
+        <link rel="stylesheet" href="./css/ib.css">
+        <!-- Production
+        <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+        <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+        <script type="module" src="https://in-between-cards.com/js/in-between.min.js"></script>
+        <link rel="stylesheet" href="https://in-between-cards.com/css/in-between.min.css">
+        -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <style type="text/css">
             html, body {
                 margin: 0;
@@ -17,8 +25,8 @@
         </style>
         <script type="text/javascript">
             $(() => {
-                // custom API address with trailing slash (/)
-                IBC.api = 'http://192.168.1.143/api/'
+                // custom API address without the trailing slash (/)
+                IBC.api = 'http://192.168.1.143'
                 // console.log('Logging on API', IBC.api);
             });
         </script>
