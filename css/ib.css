@@ -80,9 +80,6 @@ main, #logo, .info_user_name {
 .room_name {
     top: calc(2 *var(--box-height) - var(--line-width) * 3);
 }
-#logo {
-    left: var(--edge-pos);
-}
 .info_activities, .info_message, .info_points {
     right: var(--edge-pos);
 }
@@ -92,6 +89,7 @@ main, #logo, .info_user_name {
 #logo {
     --box-width: var(--logo-size);
     --box-height: var(--logo-size);
+    left: var(--edge-pos);
     cursor: pointer;
     font-size: 0;
     z-index: 1;
@@ -303,6 +301,9 @@ input {
 
 div.login {
     display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
 }
 
 .button {
@@ -367,11 +368,11 @@ div.login {
     z-index: 2;
 }
 .roomlist {
-    --box-width: 50vw;
-    --box-height: 70vh;
+    --box-width: 80%;
+    --box-height: 60vh;
     position: fixed;
-    top: 10vh;
-    left: 30vh;
+    top: 20vh;
+    left: 10%;
     height: var(--box-height);
     width: var(--box-width); 
     pointer-events: auto;
@@ -396,8 +397,8 @@ div.login {
 }
 
 .modal {
-    --box-height: 90vh;
-    --box-width: 90vw;
+    --box-height: 90%;
+    --box-width: 90%;
     --box-opacity: 1;
     z-index: 7;
     position: fixed;
@@ -432,6 +433,15 @@ div.login {
     &.room {
         --box-height: 60vh;
     }
+}
+
+figure > img {
+    max-height: 140px;
+    max-width: 100%;
+}
+
+figure > img.large {
+    max-height: 400px;
 }
 
 .form input {
@@ -483,6 +493,9 @@ div.login {
             white-space: normal;
         }
     }
+    .modal.quarter {
+        --box-width: 90%;
+    }
 }
 @media only screen and (max-height: 560px) {
     body {
@@ -490,6 +503,14 @@ div.login {
     }
     .pot {
         top: 315px;
+    }
+}
+@media only screen and (max-width: 460px) {
+    .roomlist {
+        --box-height: 55vh;
+    }
+    .login.bottom {
+        top: 85%;
     }
 }
 @media only screen and (max-height: 400px) {
@@ -519,6 +540,9 @@ div.login {
     }
     .players {
         top: 19vh;
+        overflow-x: auto;
+        overflow-y: hidden;
+        pointer-events: auto;
     }
     .pot {
         top: 53%;
@@ -535,5 +559,16 @@ div.login {
     .discards {
         top: 50%;
         left: 244px;
+    }
+    .player {
+        --box-height: 200px;
+    }
+    .hand {
+        top: 58vh;
+    }
+    .timer {
+        transform: rotate(90deg) translateX(-50px) scaleX(0.2);
+        transform-origin: bottom;
+
     }
 }
