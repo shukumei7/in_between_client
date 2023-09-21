@@ -6,7 +6,7 @@ const e = React.createElement;
 const useState = React.useState;
 const useEffect = React.useEffect;
 
-export default function User({user, updateDetails, activateUI }) {
+export default function User({user, updateDetails }) {
     const [ showRegistation, setShowRegistation ] = useState(false);
     const [ showLogin, setShowLogin ] = useState(false);
     const [ showButton, setShowButton ] = useState(false);
@@ -85,16 +85,13 @@ export default function User({user, updateDetails, activateUI }) {
 
     return (e('div', { key : 1, className : 'login buttons'}, [
             e('a', { key : 'guest', className : "button", onClick : () => {
-                activateUI();
                 IBC.post(accounts, loginUser);
             }}, e(DisplayBox, { content : 'Play as Guest', addClass : 'single center'})),
             e('a', { key : 'login', className : "button", onClick : () => {
                 setShowLogin(true);
-                activateUI();
             }}, e(DisplayBox, { content : 'Log In', addClass : 'single center'})),
             e('a', { key : 'register', className : "button", onClick : () => {
                 setShowRegistation(true);
-                activateUI();
             }}, e(DisplayBox, { content : 'Register', addClass : 'single center'}))
         ]));
 }

@@ -50,7 +50,7 @@ function Title({ text = 'In Between'}) {
 }
 
 function Tutorial() {
-    return e('div', {key : 'how to play', className : 'body'}, [
+    return e('div', {key : 'how to play', className : 'body tutorial'}, [
         e('h3', {key : 'subheading2'}, 'How to Play'),
         e('h4', {key : 'subheading3'}, 'Summary'),
         e('p', {key : 'gist'}, [
@@ -59,16 +59,16 @@ function Tutorial() {
             ' those cards.',
         ]),
         e('figure', { key : 'hand' }, [
-            e('img', { key : 'image' , src : '/img/sample-hand.png', alt : 'Sample Hand', height : '140px'}),
+            e('img', { key : 'image' , src : '/img/sample-hand.png', alt : 'Sample Hand'}), // height : '140px'}),
             e('figcaption', { key : 'caption'}, 'Your hand')
         ]),
         e('figure', { key : 'lost' }, [
-            e('img', { key : 'image' , src : '/img/sample-lose.png', alt : 'Sample Lose', height : '140px'}),
+            e('img', { key : 'image' , src : '/img/sample-lose.png', alt : 'Sample Lose'}), //, width : '100%' }), //, height : '140px'}),
             e('figcaption', { key : 'caption'}, 'Losing the round')
         ]),
         e('p', {key : 'playing'}, 'When it is your turn, you will see these action buttons appear:'),
         e('figure', { key : 'actions' }, [
-            e('img', { key : 'image' , src : '/img/sample-actions.png', alt : 'Action Buttons', height : '140px'}),
+            e('img', { key : 'image' , src : '/img/sample-actions.png', alt : 'Action Buttons'}), //, height : '140px'}),
             e('figcaption', { key : 'caption'}, 'Action Buttons')
         ]),
         e('p', {key : 'playing-summary'}, [
@@ -81,7 +81,7 @@ function Tutorial() {
             ' means you will skip guessing and not bet any points.'
         ]),
         e('figure', { key : 'lost-message' }, [
-            e('img', { key : 'image' , src : '/img/sample-lose-message.png', alt : 'Sample Lose Message', height : '50px'}),
+            e('img', { key : 'image' , src : '/img/sample-lose-message.png', alt : 'Sample Lose Message'}), //, height : '50px'}),
             e('figcaption', { key : 'caption'}, 'Message when you lose')
         ]),
         e('p', { key : 'playing-controls'}, 'The yellow up and down buttons allows you to raise or lower your bet. Or, you can just enter a number. Take note, there are limits to what you can wager.'),
@@ -98,7 +98,7 @@ function Tutorial() {
             '.'
         ]),
         e('figure', { key : 'pot-image' }, [
-            e('img', { key : 'image' , src : '/img/sample-pot.png', alt : 'The Pot', height : '100px'}),
+            e('img', { key : 'image' , src : '/img/sample-pot.png', alt : 'The Pot'}), //, height : '100px'}),
             e('figcaption', { key : 'caption'}, 'The Pot')
         ]),
         e('p', { key : 'pot2' }, 'The Pot is the point pool you will be fighting over. When it reaches zero (0), all players will have to pay the buy-in amount again. Because of this, you can only bet a maximum of the amount of the Pot.'),
@@ -123,24 +123,24 @@ function Tutorial() {
             ' can be viewed by clicking on them.'
         ]),
         e('figure', { key : 'decks' }, [
-            e('img', { key : 'image' , src : '/img/sample-decks.png', alt : 'The Decks', height : '120px'}),
+            e('img', { key : 'image' , src : '/img/sample-decks.png', alt : 'The Decks'}), //, width : '100%' }), //, height : '120px'}),
             e('figcaption', { key : 'caption'}, 'The Decks')
         ]),
         e('h4', {key : 'subheading6'}, 'User Account'),
         e('p', { key : 'login'}, 'To play the game, you will need an Account. To make it easy for you, you can also play as a Guest, which will automatically create an Account for you with a random name. As long as you will play on the same device, you can always come back to this Account. If you do choose to Register, you can choose your name and provide your e-mail and password to be able to log in on other devices.'),
         e('figure', { key : 'login-page' }, [
-            e('img', { key : 'image' , src : '/img/login.png', alt : 'Log In Page', height : '120px'}),
+            e('img', { key : 'image' , src : '/img/login.png', alt : 'Log In Page'}), //, width : '100%' }), // height : '120px'}),
             e('figcaption', { key : 'caption'}, 'Log In Page')
         ]),
         e('h4', {key : 'subheading7'}, 'Rooms and Navigation'),
         e('p', { key : 'rooms'}, 'After logging in, you will see a Room list. You should be able to join most Rooms. If you click on a Room, you will be able to preview what is happening in the Room and that if it requires a Passcode. Rooms with Passcodes are Private Rooms and you need to provide that code to enter.'),
         e('p', { key : 'create-room'}, 'You can also create your own room with custom settings and lock it with a Passcode.'),
         e('figure', { key : 'room-list' }, [
-            e('img', { key : 'image' , src : '/img/sample-room-list.png', alt : 'Room List', height : '500px'}),
+            e('img', { key : 'image' , src : '/img/sample-room-list.png', alt : 'Room List', className : 'large'}), //, width : '100%' }), //, height : '500px'}),
             e('figcaption', { key : 'caption'}, 'Room List')
         ]),
         e('figure', { key : 'room-preview' }, [
-            e('img', { key : 'image' , src : '/img/sample-preview.png', alt : 'Room Preview', height : '300px'}),
+            e('img', { key : 'image' , src : '/img/sample-preview.png', alt : 'Room Preview', className : 'large'}), //, width : '100%' }), //, height : '300px'}),
             e('figcaption', { key : 'caption'}, 'Room Preview')
         ]),
         e('h4', {key : 'subheading8'}, 'Conclusion'),

@@ -1,6 +1,7 @@
 import IBCMain from './IB/main.js';
 import { Cookie } from './cookies.js';
 import { ErrorBox } from './IB/box.js';
+import Options from './IB/options.js';
 
 let IBC = {
     api             : 'http://localhost',
@@ -213,6 +214,8 @@ $(() => {
         console.log('Server is UP');
         IBC.root = ReactDOM.createRoot(document.querySelector('main'));
         IBC.root.render(React.createElement(IBCMain));
+        IBC.options = ReactDOM.createRoot(document.querySelector('aside'));
+        IBC.options.render(React.createElement(Options));
         // load cookie options
         IBC.volume.master = Cookie.get(IBC.cookies.master, IBC.volume.master);
         IBC.volume.se = Cookie.get(IBC.cookies.se, IBC.volume.se);
