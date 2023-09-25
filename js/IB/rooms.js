@@ -48,6 +48,9 @@ function RoomNavigation({room, enterRoom, leaveRoom}) {
         if(!showButtons) {
             getRoomList();
         }
+        if(room.id) {
+            setShowButtons(false);
+        }
         setDisplay(e('div', { key : 'room name', className : 'info room_name', onClick : leaveRoom }, e(DisplayBox, { content : room.name , addClass : 'single right' })));
     }, [room.id]);
     
