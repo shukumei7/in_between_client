@@ -57,7 +57,10 @@ export default function User({user, updateDetails }) {
         IBC.post(accounts, {
             id      : user_id,
             token   : token
-        }, loginUser, () => {
+        }, (res) => {
+            loginUser(res);
+            IBC.analytics.event('auto_login');
+        }, () => {
             setShowButton(true);
         });
     }
@@ -68,24 +71,23 @@ export default function User({user, updateDetails }) {
     }
 
     if(showRegistation) {
-        return e(RegistrationUI, { loginUser : (res) => {
-            loginUser(res);
-        }, close : () => {
+        return e(RegistrationUI, { loginUser : loginUser, close : () => {
             setShowRegistation(false);
         }});
     }
 
     if(showLogin) {
-        return e(LoginUI, { loginUser : (res) => {
-            loginUser(res);
-        }, close : () => {
+        return e(LoginUI, { loginUser : loginUser, close : () => {
             setShowLogin(false);
         }});
     }
 
     return (e('div', { key : 1, className : 'login buttons'}, [
             e('a', { key : 'guest', className : "button", onClick : () => {
-                IBC.post(accounts, loginUser);
+                IBC.post(accounts, (res) => {
+                    loginUser(res);
+                    IBC.analytics.event('guest_login');
+                });
             }}, e(DisplayBox, { content : 'Play as Guest', addClass : 'single center'})),
             e('a', { key : 'login', className : "button", onClick : () => {
                 setShowLogin(true);
@@ -106,6 +108,7 @@ function UserUI({user, logout}) {
             IBC.clearAlert();
             Cookie.set(IBC.cookie_id, 0);
             Cookie.set(IBC.cookie_token, '');
+            IBC.analytics.event('logout');
             logout();
         } }, e(DisplayBox, { content : user.name, addClass : 'single right' })));
     }, []);
@@ -161,6 +164,7 @@ function LoginUI({loginUser, close}) {
             email       : email,
             password    : pass,
         }, (res) => {
+            IBC.analytics.event('secured_login');
             loginUser(res);
         }, () => {
             setError(e(ErrorBox, { key : 'error', message : 'Unable to log in', close : () => {
@@ -333,6 +337,7 @@ function RegistrationUI({loginUser, close}) {
                     email       : email,
                     password    : password
                 }, (res) => {
+                    IBC.analytics.event('register_login');
                     loginUser(res);
                 })
             }

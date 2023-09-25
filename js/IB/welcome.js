@@ -66,6 +66,11 @@ function Tutorial() {
             e('img', { key : 'image' , src : '/img/sample-lose.png', alt : 'Sample Lose'}), //, width : '100%' }), //, height : '140px'}),
             e('figcaption', { key : 'caption'}, 'Losing the round')
         ]),
+        e('p', { key : 'value'}, 'The value of the cards is based on their number/letter and their suit/symbol. You can use the logo for reference. The order of their value is highest to lowers from left to right and top to bottom.'),
+        e('figure', { key : 'logo' }, [
+            e('img', { key : 'image' , src : '/img/ib-logo.png', alt : 'Reference Logo'}), //, width : '100%' }), //, height : '140px'}),
+            e('figcaption', { key : 'caption'}, 'The order of value of letters and suits')
+        ]),
         e('p', {key : 'playing'}, 'When it is your turn, you will see these action buttons appear:'),
         e('figure', { key : 'actions' }, [
             e('img', { key : 'image' , src : '/img/sample-actions.png', alt : 'Action Buttons'}), //, height : '140px'}),

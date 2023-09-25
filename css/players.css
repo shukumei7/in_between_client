@@ -2,12 +2,15 @@
     position: relative;
     top: 20vh;
     display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .player {
     --box-height: 320px;
     position: relative;
     margin: 0 10px;
     height: var(--box-height);
+    max-width: 300px;
     flex: 1;
     color: white;
     font-weight: bold;

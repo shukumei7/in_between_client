@@ -30,6 +30,7 @@ function GameInfo({user, game}) {
         IBC.play('tick');
         if(!showDiscards) {
             setShowDiscards(true);
+            IBC.analytics.event('open_discards');
             return;
         }
         $('.discards .card').addClass('pass');
@@ -139,7 +140,7 @@ export function Players({user, players, playing, dealer, current, scores, hands}
             out.push(e(Player, { key : 'player_' + id, name : players[id], is_dealer : dealer == id, is_current : current == id, score : scores[id], hand : hands[id]}));
         }
         setDisplay(out);
-    }, [current]);
+    }, [current, dealer]);
     return display;;
 }
 

@@ -63,7 +63,10 @@ function RoomNavigation({room, enterRoom, leaveRoom}) {
         e('div', { key : 'actions', className : 'login bottom buttons' }, [
             e('a', { key : 'play', className : 'button', onClick : () => {
                 IBC.play('tick');
-                IBC.post(games, joinRoom, (xhr) => {
+                IBC.post(games, (res) => {
+                    joinRoom(res);
+                    IBC.analytics.event('quick_play');
+                }, (xhr) => {
                     console.log('Error', xhr);
                 });
             }}, e(DisplayBox, { content : 'Quick Play', addClass : 'single center'})),
@@ -100,6 +103,7 @@ function RoomList({games, rooms, joinRoom }) {
             IBC.get(games + '/' + room.id, (res) => {
                 /// console.log('Room Info', res);
                 setPreview(res);
+                IBC.analytics.event('preview_room', { room_id : room.id});
             });
         }}, room.name));
     }
@@ -116,6 +120,7 @@ function RoomList({games, rooms, joinRoom }) {
             IBC.post('games/' + preview.room_id, data, (res) => {
                 joinRoom(res);
                 setPreview(null);
+                IBC.analytics.event('join_room', { room_id : res.room_id});
             }, (xhr) => {
                 setError(e(ErrorBox, { message : 'Cannot join room', close : () => {
                     setError(null);
@@ -234,12 +239,16 @@ function RoomUI({ enterRoom , close }) {
     if(available) {
         buttons.push(e('a', { key : 'create', className : 'button medium', onClick : () => {
             IBC.play('tick');
-            IBC.post('rooms', {
+            const data = {
                 name        : $('#' + name_ID).val(),
                 passcode    : $('#' + pass_ID).val(),
                 max_players : $('#' + max_ID).val(),
                 pot         : $('#' + pot_ID).val(),
-            }, enterRoom);
+            };
+            IBC.post('rooms', data, (res) => {
+                enterRoom(res);
+                IBC.analytics.event('create_room_start', data);
+            });
         }}, e(DisplayBox, { content : 'Create' , addClass : 'single center'})));
     }
     return [
