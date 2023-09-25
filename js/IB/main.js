@@ -88,7 +88,6 @@ function IBCMain() {
             }
             // limit update when in turn
             updateGameData(status, status.current == user.id);
-            IBC.play('lounge', 'bgm');
             if(status.current == user.id) {
                 // console.log('Stop updates on turn');
                 return;
@@ -102,6 +101,10 @@ function IBCMain() {
     }
 
     const getMainElements = () => {
+        if(!interaction) {
+            return e(Welcome, { close : activateUI });
+        }
+
         let out = [];
 
         out.push(e(User, { key : 'user', user : user, updateDetails : (user, message, points) => {
@@ -181,7 +184,7 @@ function IBCMain() {
 
         const max_bet = IBC.getMaxBet(game.pot, points);
         // console.log('Get Max Bet', max_bet, game.pot, points, IBC.restrict_bet);
-        out.push(e(PlayerAction, { key : 'playbar', turn : game.current == user.id, max_bet : max_bet, play : (bet) => {
+        out.push(e(PlayerAction, { key : 'playbar', progress : game.activities.length, hand : game.hand.length, turn : game.current == user.id, max_bet : max_bet, play : (bet) => {
             // console.log('Max Bet', max_bet);
             if(bet < 1 || bet > max_bet) {
                 // error message
@@ -199,6 +202,10 @@ function IBCMain() {
                 state.hand = game.hand.concat([res.card]);
                 state.activities = res.activities;
                 state.pot = res.pot;
+                IBC.analytics.event('turn_play', {
+                    bet     : bet,
+                    hand    : state.hand
+                });
                 // console.log('temp game state', state);
                 setGame(state); // controlled game update to show cards before clearing
                 setMessage(res.message);
@@ -224,18 +231,18 @@ function IBCMain() {
             IBC.post(games, {
                 action : 'pass'
             }, (res) => {
-                // console.log('Passed', res.hand);
+                IBC.analytics.event('turn_pass');
                 setTimeout(() => {
-                    // console.log('Update after pass', res);
                     updateGameData(res);
                     checkGameStatus();
-                    // console.log('Show logs');
                     (true);
                 }, 1200);
             });
         }}));
 
-        if(!showTimer) {
+        // console.log('Update up to Actions', game.activities.length);
+
+        if(!showTimer || game.hand.length > 2) {
             if($('.playbar').is(':visible')) {
                 // console.log('Show timer and hide logs');
                 setShowTimer(true);
@@ -253,13 +260,13 @@ function IBCMain() {
         const ms = (new Date(time)).getTime();
         const seconds = ms / 1000;
         out.push(e(Timer, { key : 'timer', deadline : seconds + IBC.timeout, requestUpdate : checkGameStatus }));
-
+        
         return out;
     }
 
     useEffect(() => {
         setDisplay(getMainElements());
-    }, [user.id, room.id, showTimer, game.hand, showLogs]);
+    }, [user.id, room.id, showTimer, game.activities.length, showLogs, interaction]);
 
     useEffect(() => {
         if(room.id) {
@@ -272,13 +279,9 @@ function IBCMain() {
         const isTurn = game.current == user.id;
         setShowLogs(!isTurn);
         setShowTimer(isTurn);
-    }, [game.current]);
+    }, [game.current, game.activities.length]);
 
-    if(!interaction) {
-        return e(Welcome, { close : activateUI });
-    }
-
-    return display;
+    return display; // getMainElements();
 }
 
 export default IBCMain;

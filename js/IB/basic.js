@@ -42,33 +42,32 @@ function BasicUI({user, points, message, activities, showLogs, setShowLogs}) {
 
         out.push(e(Points, { key : 'points', points : points}));
 
-        if(activities.length) {
-            out.push(e(Activities, { 
-                key          : 'activities',
-                user         : user, 
-                activities   : activities, 
-                bottom       : showLogs ? 'var(--log-up)' : 'var(--log-down)',
-                scrollBottom : () => {
-                    if(bottom) scrollBottom();
-                }
-            }));
-            // console.log('Show Acts', activities.length, acts);
-            if(showLogs && !bottom) {
-                // console.log('Show Bottom Button');
-                out.push(e('a', { key : 'bottom', className : 'button short bottom', onClick : () => {
-                    IBC.play('tick');
-                    scrollBottom();
-                    $('.button.bottom').hide();
-                }}, e(DisplayBox, { content : e('i', { className : 'arrow down'}), addClass : 'single center'})));
+        out.push(e(Activities, { 
+            key          : 'activities',
+            user         : user, 
+            activities   : activities, 
+            showLogs     : showLogs,
+            scrollBottom : () => {
+                if(bottom) scrollBottom();
             }
-        } else if(showLogs) {
+        }));
+        // console.log('Show Acts', activities.length, acts);
+        
+            // console.log('Show Bottom Button');
+        out.push(e(BottomButton, { key : 'bottom_scroll', bottom : bottom, showLogs : showLogs && activities.length, scrollBottom : () => {
+            IBC.play('tick');
+            scrollBottom();
+            $('.button.bottom').hide();
+        }}));
+
+        if(!activities.length && showLogs) {
             setShowLogs(false);
         }
 
         out.push(e(Message, { 
             key     : 'message', 
             message : message , 
-            bottom  : showLogs ? 'var(--message-up)' : 'var(--message-down)',
+            showLogs : showLogs,
             toggle  : () => {
                 IBC.play('tick');
                 if(!activities.length) {
@@ -81,7 +80,7 @@ function BasicUI({user, points, message, activities, showLogs, setShowLogs}) {
                 setBottom(true);
             }
         }));
-
+        // console.log('Update Elements', activities.length);
         return (out);
     }
 
@@ -100,16 +99,23 @@ function BasicUI({user, points, message, activities, showLogs, setShowLogs}) {
     }, [div]);
 
     useEffect(() => {
-        setDisplay(getElements());
-    }, [showLogs, points, message, activities.length, bottom]);
-
+            setDisplay(getElements());
+    }, [showLogs, points, message, bottom, activities.length]);
     return display;
-    
 }
 
-function Activities({user, activities, bottom, scrollBottom}) {
+function BottomButton({bottom, showLogs, scrollBottom}) {
+    if(!showLogs || bottom) {
+        return '';
+    }
+    //  console.log('Render Button', showLogs, bottom, showLogs && !bottom);
+    return e('a', { key : 'bottom', className : 'button short bottom', onClick : scrollBottom}, e(DisplayBox, { content : e('i', { className : 'arrow down'}), addClass : 'single center'}))
+}
+
+function Activities({user, activities, showLogs, scrollBottom}) {
     const [ box , setBox ] = useState('');
     const [ display , setDisplay ] = useState([]);
+
     useEffect(() => {
         // console.log('Update Activities', activities.length);
         const getOneAct = (event) => {
@@ -143,6 +149,11 @@ function Activities({user, activities, bottom, scrollBottom}) {
                     return;
             }
         }
+        if(!activities.length) {
+            IBC.previous = activities;
+            setDisplay([]);
+            return;
+        }
         const previous = IBC.previous;
         let last = previous.length ? previous.slice(-1).pop() : null;
         let o = [];
@@ -157,20 +168,22 @@ function Activities({user, activities, bottom, scrollBottom}) {
                     getOneAct(activity);
                 }, count++ * 500);
             }
-            o.push(e(Activity, { key : x, user : user, activity : activity}));
+            o.push(e(Activity, { key : activity.id, user : user, activity : activity}));
         }
         IBC.previous = activities;
         scrollBottom()
-        // console.log('Append activities', o.length);
-        setDisplay(display.concat(o));
+        const newD = display.concat(o)
+        // console.log('Append activities', o.length, display.length, newD.length);
+        setDisplay(newD);
     }, [activities.length]);
     useEffect(() => {
+        const bottom = showLogs ? 'var(--log-up)' : 'var(--log-down)';
         const isDown = bottom.includes('down');
         setBox(e('div', { key : 'activities', className : 'info info_activities ' + (!isDown ? '' : 'compress'), style : {
             bottom : bottom,
             '--box-opacity'     : !isDown ? 1 : 0.9
         }}, e(DisplayBox, { content : display })));
-    }, [bottom]);
+    }, [showLogs, display]);
     return box;
 }
 
@@ -217,10 +230,11 @@ function Points({ points }) {
     return display;
 }
 
-function Message({ message , bottom, toggle }) {
+function Message({ message , showLogs, toggle }) {
     const [ display , setDisplay ] = useState('');
     useEffect(() => {
         // console.log('Update Message', message);
+        const bottom = showLogs ? 'var(--message-up)' : 'var(--message-down)';
         const isDown = bottom.includes('down');
         setDisplay(e('div', { key : 'message', className : 'info info_message', style : {
             bottom          : bottom,
@@ -233,7 +247,7 @@ function Message({ message , bottom, toggle }) {
             ], addClass : 'single'})),
             
         ]));
-    }, [message, bottom, IBC.showHelp]);
+    }, [message, showLogs, IBC.showHelp]);
     return display;
     
 }

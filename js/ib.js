@@ -18,6 +18,21 @@ let IBC = {
     options         : null,
     headers         : null,     
     showHelp        : true,   
+    analytics       : {
+        tracker_id  : null,
+        gtag        : (...args) => {
+            if(!IBC.analytics.tracker_id || typeof gtag != 'function') {
+                return false;
+            }
+            gtag.apply(null, args);
+        },
+        event       : (event_name, params) => {
+            IBC.analytics.gtag('event', event_name, params);
+        },
+        consent     : (consent_name, params) => {
+            IBC.analytics.gtag('consent', consent_name, params);
+        }
+    },
     cookies         : {
         font    : 'font',
         master  : 'master',
