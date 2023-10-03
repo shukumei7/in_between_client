@@ -181,7 +181,7 @@ export function Player({name, is_dealer, is_current, score, hand}) {
         if(!face) {
             return;
         }
-        let css = css = {
+        let css = {
             backgroundPositionY : 0
         };
         let addClass = '';
