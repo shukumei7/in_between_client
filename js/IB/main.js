@@ -66,8 +66,8 @@ function IBCMain() {
             setGame(emptyGame);
             return;
         }
-        if(!room.id && game.activities.length) {
-            setMessage('You got kicked out of the room');
+        if(!room.id) {
+            if(game.activities.length) setMessage('You got kicked out of the room');
             setGame(emptyGame);
             return;
         }
@@ -198,6 +198,11 @@ function IBCMain() {
                 action  : 'play',
                 bet     : bet
             }, (res) => {
+                if(typeof res.card == 'undefined') {
+                    // not in turn probably
+                    checkGameStatus();
+                    return;
+                }
                 let state = game;
                 state.hand = game.hand.concat([res.card]);
                 state.activities = res.activities;
@@ -279,6 +284,7 @@ function IBCMain() {
         const isTurn = game.current == user.id;
         setShowLogs(!isTurn);
         setShowTimer(isTurn);
+        if(isTurn) clearTimeout(IBC.timers.others);
     }, [game.current, game.activities.length]);
 
     return display; // getMainElements();

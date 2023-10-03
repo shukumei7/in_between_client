@@ -1,4 +1,5 @@
 @import "arrows.css";
+@import "avatar.css";
 @import "box.css";
 @import "cards.css";
 @import "deck.css";
@@ -15,20 +16,19 @@
     --box-opacity: 0.9;
     --text-color: rgba(255,223,0,1);
     --line-color: var(--sand-color);
-    --single-height: 6vh;
+    --single-height: 40px;
     --log-transition: 1s;
     --card-transition: 2s;
     --log-height: 21.5vh;
     --log-up: calc(-1 * (var(--line-width)));
-    --log-down: calc(-1 * (var(--log-height) + var(--line-width)));
+    --log-down: calc(-1 * (var(--message-up) + var(--line-width)));
     --message-up: 22.5vh;
     --message-down: 14px;
     --placeholder-color: lightgrey;
-    --line-width: 0.7vh;
-    --line-tail: 1.5vh;
+    --line-width: 5px;
+    --line-tail: 10px;
     --suit-size : 1.4px;
     --timer-width: 50px;
-    --logo-size: calc(3*var(--single-height) - 2*var(--line-width));
     --edge-pos: calc(-1 * var(--line-width));
     --small-font: 0.8em;
     --large-font: 1.2em;
@@ -87,31 +87,19 @@ main, #logo, .info_user_name {
     --box-height: var(--single-height);
 }
 #logo {
+    --logo-size: calc(18vh - 2*var(--line-width));
+    --suit-size: 0.17vh;
     --box-width: var(--logo-size);
     --box-height: var(--logo-size);
     left: var(--edge-pos);
     cursor: pointer;
     font-size: 0;
     z-index: 1;
-    .number {
-        font-size: 12pt;
-    }
-}
-.logo-row {
-    width: 100%;
-    text-align: center;
-    padding-top: 10px;
-    .number {
-        color: white;
-        font-weight: bold;
-        position: relative;
-        font-size: var(--small-font);
-        top: 18px;
-        left: 14px;
-        transform: translate(
-            -50%,
-            -50%
-        )   
+    .content {
+        background-image: url("/img/ib-logo.png");
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
     }
 }
 .info {
@@ -125,6 +113,7 @@ main, #logo, .info_user_name {
 .room_name, .info_user_name, .info_points {
     --box-width: 250px;
     right: var(--edge-pos);
+    transition: top var(--log-transition), left var(--log-transition);
 }
 
 .info_points {
@@ -163,7 +152,7 @@ main, #logo, .info_user_name {
     }
 }
 .info_activities {
-    --box-height: var(--log-height);
+    --box-height: calc(1*(var(--message-up) + 2*var(--line-width)));
     bottom: var(--log-down);
     .content div {
         padding-top: 20px;
@@ -409,9 +398,9 @@ div.login {
     width: var(--box-width);
     pointer-events: auto;
     >.box >.content {
-        padding: 20px;
+        padding: var(--content-pad);
         top: 1px;
-        height: 93.5%;
+        height: calc(100% - 2 * var(--content-pad) - var(--line-width));
     }
     &.half {
         --box-height: auto;
@@ -461,8 +450,8 @@ figure > img.large {
     color: var(--placeholder-color);
 }
 
-.discards {
-    transition: top var(--log-transition), left var(--log-transition);
+.discards, .deck, .hidden, .hand {
+    transition: top var(--log-transition), left var(--log-transition), right var(--log-transition);
 }
 
 .closeX {
@@ -477,6 +466,13 @@ figure > img.large {
         background-position-x: -514px;
         background-size: 1390px;
     }
+    .players {
+        top: 19vh;
+        overflow-y: hidden;
+        pointer-events: auto;
+        justify-content: left;
+        overflow-x: auto;
+    }
     .pot {
         left: 100px;
     }
@@ -488,21 +484,64 @@ figure > img.large {
     }
     .discards {
         left: 370px;
+        --discard-top: 30vh;
         >.count {
             margin-top: -30px;
-            white-space: normal;
         }
     }
     .modal.quarter {
         --box-width: 90%;
     }
+    .player {
+        --box-height: 170px;
+        > .box > .content {
+            width: 150px;
+        }
+    }
+    .playbar {
+        right: 0;
+    }
 }
-@media only screen and (max-height: 560px) {
+@media only screen and (max-height: 650px) {
+    body {
+        background-position-y: -160px;
+    }
+    .playbar {
+        top: 70vh;
+    }
+    .hand {
+        left: 3vw;
+    }
+}
+@media only screen and (max-width: 500px) {
     body {
         background-position-y: -128px;
     }
     .pot {
-        top: 315px;
+        top: 53%;
+        left: 60px;
+    }
+    .deck {
+        top: 350px;
+        left: 187px;
+    }
+    .hidden {
+        top: 336px;
+        right: 80px;
+    }
+    .discards {
+        top: 390px;
+        left: 220px;
+    }
+    .hand {
+        top: 58vh;
+    }
+    .timer {
+        transform: rotate(90deg) translateX(-50px) scaleX(0.2);
+        transform-origin: bottom;
+    }
+    .info_message,.info_activities {
+        --box-width: calc(100vw - 1px);
     }
 }
 @media only screen and (max-width: 460px) {
@@ -512,63 +551,55 @@ figure > img.large {
     .login.bottom {
         top: 85%;
     }
+    .modal:not(.half,.quarter) {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: auto;
+        width: auto;
+        transform: none;
+    };
+}
+@media only screen and (max-width: 360px) {
+    .room_name, .info_user_name, .info_points {
+        --box-width: 60vw;
+    }
 }
 @media only screen and (max-height: 400px) {
     body {
-        background-position-y: -316px;
+        background-position-y: -230px;
     }
     .players {
         top: 22vh;
     }
     .pot {
-        top: 222px;
+        top: 300px;
     }
     .deck {
-        top: 166px;
+        top: 247px;
     }
     .hidden {
-        top: 158px;
+        top: 222px;
+        left: 335px;
     }
     .discards {
-        top: 162px;
+        top: 244px;
         left: 402px;
     }
-}
-@media only screen and (max-width: 500px) {
-    body {
-        background-position-y: -128px;
+    .room_name, .info_user_name, .info_points {
+        top: var(--edge-pos);
     }
-    .players {
-        top: 19vh;
-        overflow-x: auto;
-        overflow-y: hidden;
-        pointer-events: auto;
+    .info_user_name {
+        left: calc(100vw - 3 * var(--box-width) + 4 * var(--line-width));
     }
-    .pot {
-        top: 53%;
-        left: 60px;
-    }
-    .deck {
-        top: 45%;
-        left: 143px;
-    }
-    .hidden {
-        top: 42%;
-        left: 262px;
-    }
-    .discards {
-        top: 50%;
-        left: 244px;
-    }
-    .player {
-        --box-height: 200px;
+    .info_points {
+        left: calc(100vw - 2 * var(--box-width) + 2 * var(--line-width));
     }
     .hand {
-        top: 58vh;
+        left: 20vw;
     }
-    .timer {
-        transform: rotate(90deg) translateX(-50px) scaleX(0.2);
-        transform-origin: bottom;
-
+    .playbar {
+        top: 64vh;
     }
 }
