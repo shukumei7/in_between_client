@@ -100,7 +100,7 @@ function BasicUI({user, points, message, activities, showLogs, setShowLogs}) {
 
     useEffect(() => {
             setDisplay(getElements());
-    }, [showLogs, points, message, bottom, activities.length]);
+    }, [showLogs, points, message, bottom, activities.length, IBC.showHelp]);
     return display;
 }
 

@@ -12,7 +12,7 @@
     padding-left: 5vw;
 }
 
-.hand, .open, .discards {
+.hand, .open, .discards, .card-back {
     --box-height: 120px;
     --box-width: 90px;
     position: fixed;
@@ -33,7 +33,7 @@
         transition: margin-left var(--card-transition);
         pointer-events: auto;
         &.dealt, &.pass {
-            margin-left: 300% !important;
+            margin-left: calc(var(--box-width) * 60) !important;
         }
         .content {
             padding: 10px 0 0 10px;
@@ -62,6 +62,10 @@
             width: 0;
         }
     }
+}
+.card-back .card {
+    background: var(--sand-color);
+    border-radius: 10px;
 }
 .hand {
     .card:nth-child(3) {

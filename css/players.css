@@ -15,10 +15,30 @@
     color: white;
     font-weight: bold;
     text-align: center;
+    pointer-events: auto;
     .content {
         padding: var(--content-pad);
         overflow: hidden;
     }
+    &.current {
+        .back {
+            background: var(--sand-color);
+            background-size: 100%;
+            background-repeat: no-repeat;
+            background-position-y:0;
+            transition: background-position-y var(--log-transition);
+        }
+        .card {
+            border: 1px solid black;
+        }
+    }
+}
+
+.player .card-back {
+    position: absolute;
+    top: auto;
+    scale: 50%;
+    bottom: calc(2 * var(--line-width));
 }
 /* preserve code for future use
 .player::before {

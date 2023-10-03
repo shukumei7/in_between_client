@@ -18,6 +18,14 @@ let IBC = {
     options         : null,
     headers         : null,     
     showHelp        : true,   
+    site            : {
+        title       : '',
+        icon        : '',
+        reset       : () => {
+            document.title = IBC.site.title;
+            IBC.icon.set(IBC.site.icon);
+        }
+    },
     analytics       : {
         tracker_id  : null,
         gtag        : (...args) => {
@@ -182,17 +190,40 @@ let IBC = {
             });
         }
     },
+    timers      : {
+        others  : null
+    },
     tick        : null,
     tickSpeed   : 500,
     tickCount   : 0,
     tickMax     : 10,
     alert       : null,
+    alert2      : null,
     alertDelay  : 30000,
+    alertRate   : 500,
     alertDiff   : 10,
+    alertIcon   : '/alert.ico',
     chipDelay   : 100,
+    playAlert    : (message) => {
+        const changeTab = () => {
+            if(typeof message != 'undefined') {
+                document.title = message;
+            }
+            IBC.icon.set(IBC.alertIcon);
+            IBC.alert2 = setTimeout(resetTab, IBC.alertRate);
+        }
+        const resetTab = () => {
+            IBC.site.reset();
+            IBC.alert2 = setTimeout(changeTab, IBC.alertRate);
+        }
+        IBC.play('bell');
+        changeTab();
+    },
     clearAlert  : () => {
         clearTimeout(IBC.alert);
-        IBC.alert = null;
+        clearTimeout(IBC.alert2);
+        IBC.alert = IBC.alert2 = null;
+        IBC.site.reset();
     },
     updateFont  : (val) => {
         if(val) {
@@ -207,7 +238,21 @@ let IBC = {
             '--message-down'    : 1.11 * IBC.font_size + -3.57 + help,
             '--message-up'      : 1.21 * IBC.font_size + 165.86 + help
         });
-        // console.log('Update Font', help);
+        // console.log('Update Font', IBC.font_size, help);
+    },
+    icon        : {
+        get     : () => {
+            return document.querySelector("link[rel~='icon']");
+        },
+        set     : (name) => {
+            let link = IBC.icon.get();
+            if (!link) {
+                link = document.createElement('link');
+                link.rel = 'icon';
+                document.getElementsByTagName('head')[0].appendChild(link);
+            }
+            link.href = name;
+        }
     },
     now         : () => {
         const date = new Date();
@@ -244,6 +289,8 @@ $(() => {
         IBC.graphics.text = Cookie.get(IBC.cookies.text, IBC.graphics.text) > 0;
         IBC.showHelp = Cookie.get(IBC.cookies.help, IBC.showHelp) > 0;
         IBC.updateFont(Cookie.get(IBC.cookies.font, IBC.font_size));
+        IBC.site.title = $('title').html(); // get default site_title
+        IBC.site.icon = IBC.icon.get().href;
     }, (xhr) => {
         const message = 'Could not connect to server. Try again by refreshing this page later';
         console.log(message);
