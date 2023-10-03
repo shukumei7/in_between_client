@@ -39,6 +39,7 @@
     top: auto;
     scale: 50%;
     bottom: calc(2 * var(--line-width));
+    z-index: 1;
 }
 /* preserve code for future use
 .player::before {
