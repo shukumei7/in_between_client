@@ -29,14 +29,25 @@ export function Welcome({ close = null}) {
             e('li', {key : 7}, 'Auto-Kick: After ' + Maho.number(IBC.kick) + ' timeouts'), 
         ])
     ]));
+
+    const buttons = (key) => {
+        content.push(e('div', {key : key, className : 'buttons'}, [
+            e(Button, { key : 'close', display : 'Close', click : close, addClass : 'medium'}),
+            e(Button, { key : 'full', display : 'Play Full Screen', click : () => {
+                IBC.screen.full();
+                close();
+            }, addClass : 'long'}),
+        ]));
+    }
+
     if(true) { //IBC.showHelp) {
         if(close) {
-            content.push(e('div', {key : 'buttons1', className : 'buttons'}, e(Button, { display : 'Close', click : close, addClass : 'medium'})));
+            buttons('buttons1');
         }
         content.push(e(Tutorial, { key : 'tutorial'}));
     }
     if(close) {
-        content.push(e('div', {key : 'buttons2', className : 'buttons'}, e(Button, { display : 'Close', click : close, addClass : 'medium'})));
+        buttons('buttons2');
     }
     return e(DialogBox, { content : content});
 }
