@@ -105,6 +105,40 @@ let IBC = {
     getMaxBet(pot, points) {
         return Math.min(pot, Math.max(IBC.restrict_bet, points));
     },
+    screen  : {
+        full : () => {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) { /* Safari */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE11 */
+                elem.msRequestFullscreen();
+            }
+        },
+        reset : () => {
+            if(document.fullscreenElement === null) {
+                return false;
+            }
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) { /* Safari */
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) { /* IE11 */
+                document.msExitFullscreen();
+            }
+            return true;
+        },
+        toggle : () => {
+            if( Math.abs(window.innerHeight - screen.height) <= 1) {
+                // browser is fullscreen
+                if(IBC.screen.reset()) {
+                    return;
+                }
+            }
+            IBC.screen.full();
+        }
+    },
     volume : {
         master  : 1,
         se      : 1,
@@ -266,6 +300,10 @@ export default IBC;
 globalThis.IBC = IBC;
 
 $(() => {
+    window.addEventListener("unhandledrejection", function(promiseRejectionEvent) { 
+        // handle error here, for example log   
+        console.log('An error occurred');
+    });
     console.log('Welcome to In Between Client!');
     IBC.get('settings', (res) => {
         for(let x in res) {

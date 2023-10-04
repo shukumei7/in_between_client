@@ -148,9 +148,12 @@ export function Options() {
             IBC.updateFont();
         }
     }));
-    content.push(e('div', { key : 'buttons', className : 'buttons' }, e(Button, { display : 'Close', click : () => {
-        setShowOptions(false);
-    }, addClass : 'medium'})));
+    content.push(e('div', { key : 'buttons', className : 'buttons' }, [
+        e(Button, { key : 'close', display : 'Close', click : () => {
+            setShowOptions(false);
+        }, addClass : 'medium'}),
+        e(Button, { key : 'screen', display : 'Toggle Full Screen', click : IBC.screen.toggle, style : { '--box-width' : 210}})
+    ]));
     return e(DialogBox, { content : content});
 }
 
