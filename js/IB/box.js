@@ -16,8 +16,22 @@ export function DisplayBox({content, addClass = '', css = {}, back = {}}) {
 export function DialogBox({content, size = '', style = {}}) {
     return ([
         e('div', { key : 'blocker', className : 'blocker' }, ' '), 
-        e('div', { key : 'modal', className : 'modal ' + size }, e(DisplayBox, { content : content}))
+        e('div', { key : 'modal', className : 'modal ' + size, style : style }, e(DisplayBox, { content : content}))
     ]);
+}
+
+export function ConfirmBox({content, no = 'No', yes = 'Yes', style = {}, action, close, actionClass = 'short', closeClass = 'short'}) {
+    return e(DialogBox, {
+        size    : 'quarter',
+        style   : style,
+        content : [
+            e('div', { key : 'message' }, content),
+            e('div', { key : 'buttons', className : 'buttons' }, [
+                e(Button, { key : 'close', display : no, click : close, addClass : closeClass }),
+                e(Button, { key : 'yes', display : yes, click : action, addClass : actionClass })
+            ])
+        ]
+    });
 }
 
 export function FormBox({inputs = [], buttons = [], size = ''}) {

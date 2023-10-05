@@ -1,12 +1,12 @@
 import { Cookie , CookieConsent } from '../cookies.js';
 import IBC from '../ib.js';
-import { DisplayBox, FormBox, ErrorBox } from './box.js';
+import { DisplayBox, FormBox, ErrorBox, ConfirmBox } from './box.js';
 
 const e = React.createElement;
 const useState = React.useState;
 const useEffect = React.useEffect;
 
-export default function User({user, updateDetails }) {
+export default function User({user, updateDetails, logout }) {
     const [ showRegistation, setShowRegistation ] = useState(false);
     const [ showLogin, setShowLogin ] = useState(false);
     const [ showButton, setShowButton ] = useState(false);
@@ -14,13 +14,14 @@ export default function User({user, updateDetails }) {
 
     useEffect(() => {
         if(user.id) {
-            setDisplay(e(UserUI, { user : user, logout : () => {
+            setDisplay(e(UserUI, { user : user, logout : logout})); /*() => {
                 IBC.headers = null;
                 updateDetails({
                     id      : 0,
                     name    : ''
                 }, 'You have logged out', 0);
             }}));
+            */
         }
     }, [user]);
     
@@ -101,7 +102,7 @@ export default function User({user, updateDetails }) {
 function UserUI({user, logout}) {
     const [ display , setDisplay ] = useState('');
     useEffect(() => {
-        setDisplay(e('a', { key : 'name', className : 'info info_user_name', onClick : () => {
+        setDisplay(e('a', { key : 'name', className : 'info info_user_name', onClick : logout /* () => {
             if(!confirm('Are you sure you want to log out?')) {
                 return;
             }
@@ -110,8 +111,8 @@ function UserUI({user, logout}) {
             Cookie.set(IBC.cookie_token, '');
             IBC.analytics.event('logout');
             logout();
-        } }, e(DisplayBox, { content : user.name, addClass : 'single right' })));
-    }, []);
+        }*/ }, e(DisplayBox, { content : user.name, addClass : 'single right' })));
+    }, [user.name]);
     return display;
 }
 

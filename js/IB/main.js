@@ -7,7 +7,7 @@ import PlayerAction from './play.js';
 import GameInfo from './game.js';
 import Timer from './timer.js';
 import Welcome from './welcome.js';
-import Options from './options.js';
+import { ConfirmBox } from './box.js';
 
 const e = React.createElement;
 const useState = React.useState;
@@ -20,6 +20,7 @@ function IBCMain() {
     const [ showTimer , setShowTimer ] = useState(false);
     const [ points , setPoints ] = useState(0);
     const [ message , setMessage ] = useState(0);
+    const [ showLeave , setShowLeave ] = useState(false);
     const [ user , setUser ] = useState({
         id      : 0,
         name    : '',
@@ -115,6 +116,9 @@ function IBCMain() {
             }
             setMessage(message);
             setPoints(points);
+        }, logout : () =>  {
+            setShowLeave('user');
+            IBC.play('tick');
         }}));
 
         if(!user.id) {
@@ -147,28 +151,62 @@ function IBCMain() {
             IBC.play('success');
             // console.trace('Entered Room', room, r);
         }, leaveRoom : () => {
+            setShowLeave('room');
             IBC.play('tick');
-            setTimeout(() => {
-                setShowLogs(false);
-                if(!confirm('Are you sure you want to leave this room?')) {
-                    setShowLogs(game.current != user.id);
-                    return;
-                }
-                IBC.clearAlert();
-                IBC.previous = [];
-                IBC.post(games, { action : 'leave' }, (res) => {
-                    setRoom({
+        }}));
+
+        if(showLeave == 'user') {
+            out.push(e(ConfirmBox, {
+                key     : 'confirm',
+                content : 'Are you sure you want to log out?',
+                close   : () => {
+                    IBC.play('tick');
+                    setShowLeave(false);
+                }, action : () => {
+                    setShowLeave(false);
+                    IBC.clearAlert();
+                    IBC.headers = null;
+                    const empty = {
                         id      : 0,
                         name    : ''
-                    });
-                    updateGameData(res);
-                    IBC.play('nudge');
-                });
-            }, 10);
-        }}));
+                    };
+                    Cookie.set(IBC.cookie_id, 0);
+                    Cookie.set(IBC.cookie_token, '');
+                    IBC.analytics.event('logout');
+                    setUser(empty);
+                    setRoom(empty);
+                    setGame(emptyGame);
+                    setMessage('You have logged out');
+                    setPoints(0);
+                }
+            }));
+        }
     
         if(!room.id) {
             return out;
+        }
+
+        if(showLeave == 'room') {
+            out.push(e(ConfirmBox, {
+                key     : 'confirm',
+                content : 'Are you sure you want to leave this room?',
+                close   : () => {
+                    IBC.play('tick');
+                    setShowLeave(false);
+                }, action : () => {
+                    setShowLeave(false);
+                    IBC.clearAlert();
+                    IBC.previous = [];
+                    IBC.post(games, { action : 'leave' }, (res) => {
+                        setRoom({
+                            id      : 0,
+                            name    : ''
+                        });
+                        updateGameData(res);
+                        IBC.play('nudge');
+                    });
+                }
+            }));
         }
 
             // show game info
@@ -271,7 +309,7 @@ function IBCMain() {
 
     useEffect(() => {
         setDisplay(getMainElements());
-    }, [user.id, room.id, showTimer, game.activities.length, showLogs, interaction]);
+    }, [user.id, room.id, showTimer, game.activities.length, showLogs, interaction, showLeave]);
 
     useEffect(() => {
         if(room.id) {
