@@ -149,9 +149,9 @@ function RoomPreview({ room, enterRoom , close}) {
     let inputs = [];
     let buttons = [];
     inputs.push(e('div', { key : 'name' }, room.room_name));
-    inputs.push(e('div', { key : 'max' }, 'Max Players: ' + room.settings.max_players));
-    inputs.push(e('div', { key : 'pot' }, 'Pot Size: ' + room.settings.pot_size));
-    inputs.push(e('div', { key : 'cpot' }, 'Current Pot: ' + room.pot));
+    inputs.push(e('div', { key : 'max' }, 'Max Players: ' + Maho.number(room.settings.max_players)));
+    inputs.push(e('div', { key : 'pot' }, 'Pot Size: ' + Maho.number(room.settings.pot_size)));
+    inputs.push(e('div', { key : 'cpot' }, 'Current Pot: ' + Maho.number(room.pot)));
     inputs.push(e('div', { key : 'players' }, 'Players'));
     for(let x in room.players) {
         inputs.push(e('div', { key : 'player ' + x}, ' - ' + room.players[x] + ' : ' + Maho.number(room.scores[x])));
